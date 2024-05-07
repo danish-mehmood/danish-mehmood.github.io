@@ -1,0 +1,28 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>danish-mehmood.dev</title>
+        <link>http://localhost:1313/</link>
+        <description>This is my cool site</description>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>rdm355190@gmail.com (Danish Mehmood)</managingEditor>
+            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Mon, 06 May 2024 18:10:53 &#43;0500</lastBuildDate>
+            <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+        <item>
+    <title>Second</title>
+    <link>http://localhost:1313/second/</link>
+    <pubDate>Mon, 06 May 2024 18:10:53 &#43;0500</pubDate>
+    <author>Author</author>
+    <guid>http://localhost:1313/second/</guid>
+    <description><![CDATA[]]></description>
+</item>
+<item>
+    <title>Firts</title>
+    <link>http://localhost:1313/firts/</link>
+    <pubDate>Mon, 06 May 2024 18:04:17 &#43;0500</pubDate>
+    <author>Author</author>
+    <guid>http://localhost:1313/firts/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/posts/first/firstpost.jpg" referrerpolicy="no-referrer">
+            </div><h2 id="this-is-my-first-post-ever">This is my first post ever</h2>]]></description>
+</item>
+</channel>
+</rss>
