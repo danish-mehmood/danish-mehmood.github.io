@@ -1,0 +1,10 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>danish-mehmood</title>
+        <link>https://danish-mehmood.github.io/</link>
+        <description>Dive deep into tech</description>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>rdm355190@gmail.com (Danish Mehmood)</managingEditor>
+            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster>
+            <atom:link href="https://danish-mehmood.github.io/index.xml" rel="self" type="application/rss+xml" />
+        </channel>
+</rss>
