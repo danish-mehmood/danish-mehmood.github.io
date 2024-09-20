@@ -1,0 +1,23 @@
+.surround {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.green {
+  background-color: green;
+}
+.purple {
+  background-color: purple;
+}
