@@ -1,16 +1,18 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Software Design - Category - danish-mehmood</title>
-        <link>http://localhost:1313/categories/software-design/</link>
-        <description>Software Design - Category - danish-mehmood</description>
+        <title>software design - Category - danish-mehmood</title>
+        <link>https://danish-mehmood.github.io/categories/software-design/</link>
+        <description>software design - Category - danish-mehmood</description>
         <generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>rdm355190@gmail.com (Danish Mehmood)</managingEditor>
-            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Fri, 20 Sep 2024 20:04:02 &#43;0500</lastBuildDate><atom:link href="http://localhost:1313/categories/software-design/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Fri, 20 Sep 2024 20:04:02 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/categories/software-design/" rel="self" type="application/rss+xml" /><item>
     <title>Philosophy of Software Design Golang Part One</title>
-    <link>http://localhost:1313/philosophy-of-software-design-golang-part-one/</link>
+    <link>https://danish-mehmood.github.io/philosophy-of-software-design-golang-part-one/</link>
     <pubDate>Fri, 20 Sep 2024 20:04:02 &#43;0500</pubDate>
     <author>danish mehmood</author>
-    <guid>http://localhost:1313/philosophy-of-software-design-golang-part-one/</guid>
-    <description><![CDATA[this is the description]]></description>
+    <guid>https://danish-mehmood.github.io/philosophy-of-software-design-golang-part-one/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/posts/software-design-philosophy/software-design.png" referrerpolicy="no-referrer">
+            </div>this is the new description here we go  ]]></description>
 </item>
 </channel>
 </rss>
