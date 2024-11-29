@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>distributed systems - Tag - danish-mehmood</title>
+        <link>https://danish-mehmood.github.io/tags/distributed-systems/</link>
+        <description>distributed systems - Tag - danish-mehmood</description>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>rdm355190@gmail.com (Danish Mehmood)</managingEditor>
+            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Fri, 29 Nov 2024 08:08:47 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/tags/distributed-systems/" rel="self" type="application/rss+xml" /><item>
+    <title>Microservices Architecture Deep Dive: Part One</title>
+    <link>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/</link>
+    <pubDate>Fri, 29 Nov 2024 08:08:47 &#43;0500</pubDate>
+    <author>danish mehmood</author>
+    <guid>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/posts/microservices/microservices_header.gif" referrerpolicy="no-referrer">
+            </div>This blog series is all about microservices, we will start with simple definition of microservices and and go all the way to know how to implement them effectively and when do they make sense and when is it a stupid idea to implement microservices]]></description>
+</item>
+</channel>
+</rss>
