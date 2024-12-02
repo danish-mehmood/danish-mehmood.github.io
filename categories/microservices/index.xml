@@ -12,7 +12,10 @@
     <guid>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/images/posts/microservices/microservices_header.gif" referrerpolicy="no-referrer">
-            </div>This blog series is all about microservices, we will start with simple definition of microservices and and go all the way to know how to implement them effectively and when do they make sense and when is it a stupid idea to implement microservices]]></description>
+            </div><p><strong>Microservices</strong> are one of the most popular methodology to develop and deploy the software systems. In popularity it is
+only second to <strong>Monoliths</strong> (or Modular Monoliths).</p>
+<p>This blog series is all about microservices, how do they differ from monoliths, what are their pros and cons, when do they
+make sense and how to implement microservices effectively.</p>]]></description>
 </item>
 </channel>
 </rss>
