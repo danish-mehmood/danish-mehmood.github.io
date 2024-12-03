@@ -170,7 +170,7 @@ and lastly you can gradually keep on adding new tools to the project like you st
 
 In monoliths there is single application running on the single server and that makes it very easy to monitor it and debugging the problems, because the **life of a query** is so simple, the client makes a request and the single server responds to the request, that is it.
 
-But in case of microservices the life of the query gets exponentially bigger with the number of microservices communicating to full fill the query. consequently if there is some problem in the system its very difficult to pin point where the problem really is, and it is also very hard to monitor the whole system and get a **wholistic** view of things, below the image is depicting a problem in microservices called **_Big ball of mud_**, it refers to the communication between different microservices as big ball of mud, and it sure is ball of mud,
+But in case of microservices the life of the query gets exponentially bigger with the number of microservices communicating to full fill the query. consequently if there is some problem in the system its very difficult to pin point where the problem really is, and it is also very hard to monitor the whole system and get a **holistic** view of things, below the image is depicting a problem in microservices called **_Big ball of mud_**, it refers to the communication between different microservices as big ball of mud, and it sure is ball of mud,
 
 ![hello](/images/posts/microservices/partone/ballofmud.gif)
 

@@ -11,16 +11,16 @@ People who are new to learning about microservices architecture and when they fi
 
 > let me tell you API gateways exist to solve a very specific, single problem which is related to communication between the clients and services, everything else that you hear about API gateways being capable of doing are just some nice **sideeffects** we use to our advantage.
 
-Image yourself being a frontend engineer and you are creating the UI for the ecommerce application, you go to the backend engineer and ask him that you are developing the login experience **_what API endpoint should you use on the client side?_**
-and the backend engineer would tell you that the **Authentication Service** is the one which would handle the login, so they give you the endpoint for authentication service, now after some days you start developing the Cart functionality on the frontend and you get to know from the backend team tha, you would need to make use of two more microservices the payment and shipping service to implement that and this continues for the life time of the project.
+Imagine yourself being a frontend engineer and you are creating the UI for the ecommerce application, you go to the backend engineer and ask him that you are developing the login experience **_what API endpoint should you use on the client side?_**
+and the backend engineer would tell you that the **Authentication Service** is the one which would handle the login, so they give you the endpoint for authentication service, now after some days you start developing the Cart functionality on the frontend and you get to know from the backend team that, you would need to make use of two more microservices the payment and shipping service to implement that and this continues for the life time of the project.
 
 **_Do you see the problem?_**
 
 The clients are directly communicating with the microservices, utilizing the API exposed by the services, and this is a problem, the client is highly **coupled** with the backend services, if some endpoint changes the client would need to change too. and coupling is bad as i discussed in my [last](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/) post.
 
-We need an abstraction between the clients and the services, and that abstraction in **API Gateway**.
+We need an abstraction between the clients and the services, and that abstraction is **API Gateway**.
 
-The API gateways sits between the clients and services and now clients only need to know about the gateway and only talk to it, now the clients don't need to worry of hundreds of services to talk to, gateway will handle that. This also decouples the clients from services, because now microservices can change all they want to change and client won't need changing because now there is a level of indirection between clients and services.
+The API gateways sits between the clients and services and now clients only need to know about the gateway and only talk to it, the clients don't need to worry about hundreds of services to talk to, gateway will handle that. This also decouples the clients from services, because now microservices can change all they want to change and client won't need changing because now there is a level of indirection between clients and services.
 
 ### The Side-Effects
 
@@ -35,7 +35,7 @@ This is the major and obvious one, every microservice needs some kind of authent
 
 #### Protocol Translation
 
-As i did discuss in the [last](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/) post one of the advantage of having microservices is flexibility with choosing the technology for the implementation of the service, one microservice can have an **REST** api, one could have **graphQL** the other could have a **grpc** implemented. If clients want to talk to them, it has to speak all these languages (protocols) to implement the client side successfully which is madness.
+As i did discuss in the [last](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/) post one of the advantage of having microservices is flexibility with choosing the technology for the implementation of the service, one microservice can have an **REST** api, one could have **graphQL** the other could have a **grpc** implemented. If clients want to talk to them, they have to speak all these languages (protocols) to implement the client side successfully which is madness.
 
 So API gateway solves this problem as well by sitting between the services and clients, it acts as a protocol interpreter because as services are only talking to the gateway they only need to speak one protocol mainly **REST** and API gateway would take care of talking to diverse services in diverse protocols.
 
@@ -69,7 +69,7 @@ Some other common functionalities of API gateways include
 
 ![GWLB](images/posts/microservices/parttwo/gwlb.png)
 
-Now i am sure one question must have popped in your mind, that wouldn't the API gateway become a bottle neck as all the traffic is going through the gateway and it is acting like a funnel. you are right! there is a potential of gateway becoming a bottle neck, but there is a simple solution.
+Now i am sure one question must have popped in your mind, that **_wouldn't the API gateway become a bottle neck as all the traffic is going through the gateway and it is acting like a funnel?_** you are right! there is a potential of gateway becoming a bottle neck, but there is a simple solution.
 We can horizontally scale the API gateway and then put a load balancer in front of it, now the clients request will come to load balancer first and then the load balancer will distribute the request among the gateways.
 
 ### Backend For Frontend
@@ -79,9 +79,9 @@ We can horizontally scale the API gateway and then put a load balancer in front 
 #### The Problem
 
 During the whole blog post i have been mentioning the word **"Client"**, but the client itself is a generic term and it could be many things like a client could be a PC, a mobile, an IOT device or another microservice.
-All these clients are different in many ways, a PC for instance has all the resources in abundance like big screen, alot of memory, big compute power e.t.c, mobiles on the other hand have small screen realestate, small memory, small compute and also limite power supply.
+All these clients are different in many ways, a PC for instance has all the resources in abundance like big screen, alot of memory, big compute power e.t.c, mobiles on the other hand have small screen real estate, small memory, small compute and also limited power supply.
 
-This is the reason the backend APIs they are consuming have to be tailor made because all these clients have their own strengths and weaknesses and our goal as engineers is to exploit their strengths and hide mitigate the weaknesses as much as we can.
+This is the reason the backend APIs they are consuming have to be tailor made because all these clients have their own strengths and weaknesses and our goal as engineers is to exploit their strengths and mitigate the weaknesses as much as we can.
 
 The mobile clients and PC clients have different resources hence they can't just have same API endpoints available to consume, mobile clients show limited data and try to make as few HTTP round trips to fetch data as possible because each http request drains battery and increases latency, technology like graphql is more suitable for mobiles then the HTTP REST api.
 
@@ -89,7 +89,7 @@ Following is the depiction of difference between simple API Gateway and the gate
 
 ![BFF](images/posts/microservices/parttwo/contrast.png)
 
-You see now all the clients have a tailored gateway now they will get what they need in the most efficient way possible. All the data fetching and then aggregation login will now move to the tailored gateway and the client will focus on the frontend logic only.
+You see now all the clients have a tailored gateway now they will get what they need in the most efficient way possible. All the data fetching and then aggregation will now move to the tailored gateway and the client will focus on the frontend logic only.
 
 ### Useful Links
 
