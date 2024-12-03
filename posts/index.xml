@@ -4,7 +4,17 @@
         <link>https://danish-mehmood.github.io/posts/</link>
         <description>All Posts | danish-mehmood</description>
         <generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>rdm355190@gmail.com (Danish Mehmood)</managingEditor>
-            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Fri, 29 Nov 2024 08:08:47 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Tue, 03 Dec 2024 01:18:25 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Microservices Architecture Deep Dive Part Two : API Gateways and Backend For Frontend Pattern</title>
+    <link>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-two--api-gateways-and-bff-pattern/</link>
+    <pubDate>Tue, 03 Dec 2024 01:18:25 &#43;0500</pubDate>
+    <author>Author</author>
+    <guid>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-two--api-gateways-and-bff-pattern/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/posts/microservices/parttwo/featuredimage.gif" referrerpolicy="no-referrer">
+            </div><p>API gateway is a common pattern majority of microservices out in the world follow, to address some issues and Backend for frontend is a pattern which is a natural extension of API gateway pattern which helps the microservices scale very smoothly.</p>]]></description>
+</item>
+<item>
     <title>Microservices Architecture Deep Dive: Part One</title>
     <link>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/</link>
     <pubDate>Fri, 29 Nov 2024 08:08:47 &#43;0500</pubDate>
