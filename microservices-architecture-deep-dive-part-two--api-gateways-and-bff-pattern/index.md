@@ -5,6 +5,15 @@ API gateway is a common pattern majority of microservices out in the world follo
 
 <!--more-->
 
+{{< admonition note "Table Of Contents" >}}
+
+:(fa-solid fa-arrow-right-long): Part 1 - [Microservices Architecture Deep Dive](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/)
+
+:(fa-solid fa-arrow-right-long): Part 2 - **API Gateways and Backend For Frontend Pattern** :(fa-solid fa-arrow-left-long): you are here :(fa-solid fa-location-crosshairs):
+
+:(fa-solid fa-arrow-right-long): Part 3 - [Microservices Communication]()
+{{< /admonition >}}
+
 ### The Problem
 
 People who are new to learning about microservices architecture and when they first come across the API gateway pattern, naturally they would want to go a little deep into what gateways are, and when they do that they are often confused, because they get different uses and definitions of API gateway that they no longer could figure out what problem is it trying to solve.

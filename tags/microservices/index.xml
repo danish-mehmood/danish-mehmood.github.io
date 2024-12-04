@@ -4,11 +4,21 @@
         <link>https://danish-mehmood.github.io/tags/microservices/</link>
         <description>microservices - Tag - danish-mehmood</description>
         <generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>rdm355190@gmail.com (Danish Mehmood)</managingEditor>
-            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Tue, 03 Dec 2024 01:18:25 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/tags/microservices/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Wed, 04 Dec 2024 20:02:43 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/tags/microservices/" rel="self" type="application/rss+xml" /><item>
+    <title>Microservices Architecture Deep Dive Part Three: Communications</title>
+    <link>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/</link>
+    <pubDate>Wed, 04 Dec 2024 20:02:43 &#43;0500</pubDate>
+    <author>danish mehmood</author>
+    <guid>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/posts/microservices/partthree/featuredimage.gif" referrerpolicy="no-referrer">
+            </div>In this blog post i discuss, How microservices communicate, and what are the common patterns followed, this post would be a primer, I will go deeper in to the different patterns in future posts]]></description>
+</item>
+<item>
     <title>Microservices Architecture Deep Dive Part Two : API Gateways and Backend For Frontend Pattern</title>
     <link>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-two--api-gateways-and-bff-pattern/</link>
     <pubDate>Tue, 03 Dec 2024 01:18:25 &#43;0500</pubDate>
-    <author>Author</author>
+    <author>danish mehmood</author>
     <guid>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-two--api-gateways-and-bff-pattern/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/images/posts/microservices/parttwo/featuredimage.gif" referrerpolicy="no-referrer">

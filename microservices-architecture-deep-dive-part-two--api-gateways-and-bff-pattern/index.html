@@ -17,7 +17,7 @@
 <meta name="twitter:title" content="Microservices Architecture Deep Dive Part Two : API Gateways and Backend For Frontend Pattern"/>
 <meta name="twitter:description" content="In this blog post i discuss the utility of API gateways, what problem they solve? and i will also discuss the importance of BFF pattern"/>
 <meta name="application-name" content="danish-mehmood.io">
-<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-two--api-gateways-and-bff-pattern/" /><link rel="prev" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-two--api-gateways-and-bff-pattern/" /><link rel="prev" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/" /><link rel="next" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
@@ -38,12 +38,12 @@
                             "url": "https:\/\/danish-mehmood.github.io\/images\/posts\/microservices\/parttwo\/gwlb.png",
                             "width":  814 ,
                             "height":  377 
-                        }],"genre": "posts","keywords": "microservices, distributed systems","wordcount":  1226 ,
+                        }],"genre": "posts","keywords": "microservices, distributed systems","wordcount":  1264 ,
         "url": "https:\/\/danish-mehmood.github.io\/microservices-architecture-deep-dive-part-two--api-gateways-and-bff-pattern\/","datePublished": "2024-12-03T01:18:25+05:00","dateModified": "2024-12-03T01:18:25+05:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
-                "name": "Danish Mehmood"
+                "name": "danish mehmood"
             },"description": "In this blog post i discuss the utility of API gateways, what problem they solve? and i will also discuss the importance of BFF pattern"
     }
     </script></head>
@@ -110,9 +110,9 @@
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Microservices Architecture Deep Dive Part Two : API Gateways and Backend For Frontend Pattern</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Danish Mehmood</a></span>&nbsp;<span class="post-category">included in <a href="/categories/microservices/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>microservices</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-12-03">2024-12-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1226 words&nbsp;
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Microservices Architecture Deep Dive Part Two : API Gateways and Backend For Frontend Pattern</h1><h2 class="single-subtitle">The gateway patterns for microservices</h2><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>danish mehmood</a></span>&nbsp;<span class="post-category">included in <a href="/categories/microservices/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>microservices</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-12-03">2024-12-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1264 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;6 minutes&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
@@ -154,6 +154,17 @@
   </ul>
 </nav></div>
             </div><div class="content" id="content"><p>API gateway is a common pattern majority of microservices out in the world follow, to address some issues and Backend for frontend is a pattern which is a natural extension of API gateway pattern which helps the microservices scale very smoothly.</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Table Of Contents<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 1 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/" target="_blank" rel="noopener noreffer ">Microservices Architecture Deep Dive</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 2 - <strong>API Gateways and Backend For Frontend Pattern</strong> <i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>&nbsp;you are here <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 3 - <a href="" rel="">Microservices Communication</a></p>
+</div>
+        </div>
+    </div>
 <h3 id="the-problem">The Problem</h3>
 <p>People who are new to learning about microservices architecture and when they first come across the API gateway pattern, naturally they would want to go a little deep into what gateways are, and when they do that they are often confused, because they get different uses and definitions of API gateway that they no longer could figure out what problem is it trying to solve.</p>
 <blockquote>
@@ -254,7 +265,8 @@ All these clients are different in many ways, a PC for instance has all the reso
         </section>
     </div>
 
-    <div class="post-nav"><a href="/microservices-architecture-deep-dive-part-one/" class="prev" rel="prev" title="Microservices Architecture Deep Dive: Part One"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Microservices Architecture Deep Dive: Part One</a></div>
+    <div class="post-nav"><a href="/microservices-architecture-deep-dive-part-one/" class="prev" rel="prev" title="Microservices Architecture Deep Dive: Part One"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Microservices Architecture Deep Dive: Part One</a>
+            <a href="/microservices-architecture-deep-dive-part-three-communications/" class="next" rel="next" title="Microservices Architecture Deep Dive Part Three: Communications">Microservices Architecture Deep Dive Part Three: Communications<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="giscus" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
