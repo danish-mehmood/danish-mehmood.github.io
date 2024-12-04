@@ -15,7 +15,7 @@
 ## Preface
 
 In monoliths the application is divided into modules, those modules serve as **_logical_** separation, in microservices the application is divided into services which serve as **_physical_** separation, This changes things drastically, before the modules in monoliths used to communicate with each other using the **_method calls_** but in case of microservices the services would need to communicate using **_network calls_**.
-This presents different challenges and trade offs, we have to carefully manage these tradeoffs, there are different patterns which the industry leaders in microservices have comeup with which manage the tradeoffs really well in live environments. But still when deciding on the communication patterns for your microservices you have to pay painstaking attention to detail. Because you have to remember these communication patterns are playing with tradeoffs and you have to choose which fits best you design goals and business domain.
+This presents different challenges and trade offs, we have to carefully manage these tradeoffs, there are different patterns which the industry leaders in microservices have comeup with which manage the tradeoffs really well in live environments. But still when deciding on the communication patterns for your microservices you have to pay painstaking attention to detail. Because you have to remember these communication patterns are playing with tradeoffs and you have to choose which fits best your design goals and business domain.
 
 ## The mistake
 
@@ -24,7 +24,7 @@ They convert the application modules which were present in monolith to the servi
 
 This happens because the engineers have wrong assumptions about microservices (or distributed systems). They are still assuming somethings which they assumed for monolithic architecture like **_they have a reliable network_** (which is not true, networks are never reliable) and another assumption thy could be making is **_latency is still zero_** just like in monoliths, both assumptions are far from truth, and these false assumptions and many other fallacies are coverd in wikipedia entry [Fallacies of distributed computing](https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing?useskin=vector).
 
-If you translate all the inter module function calls to RPC calls, your services would be very chatty, which is the last thing we want. In a monolith network was not being used to communicate unlike microservices, and every call now on the network has a latency which we want to reduce.
+If you translate all the inter module function calls to RPC calls, your services would be very chatty, which is the last thing we want. In a monolith, network was not being used to communicate unlike microservices, and every call now on the network has a latency which we want to reduce.
 
 ## Challenges
 
@@ -55,7 +55,7 @@ The common challenges in microservices communications include following
 <!-- todo-add links to pub/sub and eda -->
 - **Multiple receivers**. Each request can be processed by zero to multiple receivers. This type of communication must be asynchronous. An example is the **_publish/subscribe_** mechanism used in patterns like **_Event-driven architecture_**. This is based on an event-bus interface or message broker when propagating data updates between multiple microservices through events; it's usually implemented through a service bus or similar artifact.
 
-> don't get bogged down by the different concepts like pub/sub and event-driven architecture, i will go into the detail of how these things work.
+> don't get bogged down by the different concepts like pub/sub and event-driven architecture, i will go into the detail of how these things work in future posts.
 
 A microservice-based application will often use a combination of these communication styles. The most common type is single-receiver communication with a synchronous protocol like HTTP/HTTPS when invoking a regular Web API HTTP service. Microservices also typically use messaging protocols for asynchronous communication between microservices.
 
@@ -69,11 +69,11 @@ If possible, never depend on synchronous communication (request/response) betwee
 
 ![integration](images/posts/microservices/partthree/integration.png)
 
-Moreover, having HTTP dependencies between microservices, like when creating long request/response cycles with HTTP request chains, as shown in the first part of the Figure 4-15, not only makes your microservices not autonomous but also their performance is impacted as soon as one of the services in that chain isn't performing well.
+Moreover, having HTTP dependencies between microservices, like when creating long request/response cycles with HTTP request chains, as shown in the first part of the diagram, not only makes your microservices not autonomous but also their performance is impacted as soon as one of the services in that chain isn't performing well.
 
 The more you add synchronous dependencies between microservices, such as query requests, the worse the overall response time gets for the client apps.
 
-> In summary if client requests something from microservice A and this service can't fulfill the request on its own and it talks to microservice B and consequently B needs to talk to microservice C to fulfill the request, then it means that these services are not **_autonomous_**. And if the communication between all these services in synchronous , the latency would keep on addinf with each request in the chain and if any single service fails in the chain the failure would cascade and the whole chain would fail.
+> In summary if client requests something from microservice A and this service can't fulfill the request on its own and it talks to microservice B and consequently B needs to talk to microservice C to fulfill the request, then it means that these services are not **_autonomous_**. And if the communication between all these services is synchronous , the latency would keep on adding with each request in the chain and if any single service fails in the chain the failure would cascade and the whole chain would fail.
 
 As shown in the above diagram, in synchronous communication a "chain" of requests is created between microservices while serving the client request. This is an anti-pattern. In asynchronous communication microservices use asynchronous messages or http polling to communicate with other microservices, but the client request is served right away.
 
