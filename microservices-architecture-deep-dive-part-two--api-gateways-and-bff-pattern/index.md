@@ -11,7 +11,7 @@ API gateway is a common pattern majority of microservices out in the world follo
 
 :(fa-solid fa-arrow-right-long): Part 2 - **API Gateways and Backend For Frontend Pattern** :(fa-solid fa-arrow-left-long): you are here :(fa-solid fa-location-crosshairs):
 
-:(fa-solid fa-arrow-right-long): Part 3 - [Microservices Communication]()
+:(fa-solid fa-arrow-right-long): Part 3 - [Microservices Communication](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/)
 {{< /admonition >}}
 
 ### The Problem
