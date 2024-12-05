@@ -13,7 +13,7 @@ API gateway is a common pattern majority of microservices out in the world follo
 
 :(fa-solid fa-arrow-right-long): Part 3 - [Microservices Communication](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/)
 
-:(fa-solid fa-arrow-right-long): Part 4 - [Service Discovery](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/)
+:(fa-solid fa-arrow-right-long): Part 4 - [Service Discovery](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-four-service-discovery/)
 {{< /admonition >}}
 
 ### The Problem
