@@ -4,7 +4,21 @@
         <link>https://danish-mehmood.github.io/posts/</link>
         <description>All Posts | danish-mehmood</description>
         <generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>rdm355190@gmail.com (Danish Mehmood)</managingEditor>
-            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Wed, 04 Dec 2024 20:02:43 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Thu, 05 Dec 2024 23:10:52 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Microservices Architecture Deep Dive Part Four: Service Discovery</title>
+    <link>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-four-service-discovery/</link>
+    <pubDate>Thu, 05 Dec 2024 23:10:52 &#43;0500</pubDate>
+    <author>danish mehmood</author>
+    <guid>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-four-service-discovery/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/posts/microservices/partfour/featuredimage.jpg" referrerpolicy="no-referrer">
+            </div>Table Of Contents <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 1 - Microservices Architecture Deep Dive
+<i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 2 - API Gateways and Backend For Frontend Pattern
+<i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 3 - Microservices Communication
+<i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 4 - Service Discovery <i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>&nbsp;you are here <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i>
+The Problem As i discussed in the last blog post, the communication patterns in microservices are way different than the patterns in monoliths, in monoliths the modules communicate using method calls but in case of microservices, services communicate using the network calls.]]></description>
+</item>
+<item>
     <title>Microservices Architecture Deep Dive Part Three: Communications</title>
     <link>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/</link>
     <pubDate>Wed, 04 Dec 2024 20:02:43 &#43;0500</pubDate>

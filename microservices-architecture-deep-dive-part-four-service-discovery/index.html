@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Microservices Architecture Deep Dive Part Four: Service Discovery - danish-mehmood</title><meta name="Description" content="Service discovery is an essential process in any distributed microservices environment, as it makes the environment scalable and solves a very specific communication problem. In this blog post I will go deep into this process and what are the different patterns used to implement this."><meta property="og:title" content="Microservices Architecture Deep Dive Part Four: Service Discovery" />
+<meta property="og:description" content="Service discovery is an essential process in any distributed microservices environment, as it makes the environment scalable and solves a very specific communication problem. In this blog post I will go deep into this process and what are the different patterns used to implement this." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-four-service-discovery/" /><meta property="og:image" content="https://danish-mehmood.github.io/images/posts/microservices/partfour/featuredimage.jpg" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-12-05T23:10:52+05:00" />
+<meta property="article:modified_time" content="2024-12-05T23:10:52+05:00" /><meta property="og:site_name" content="danish-mehmood.io" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://danish-mehmood.github.io/images/posts/microservices/partfour/featuredimage.jpg"/>
+
+<meta name="twitter:title" content="Microservices Architecture Deep Dive Part Four: Service Discovery"/>
+<meta name="twitter:description" content="Service discovery is an essential process in any distributed microservices environment, as it makes the environment scalable and solves a very specific communication problem. In this blog post I will go deep into this process and what are the different patterns used to implement this."/>
+<meta name="application-name" content="danish-mehmood.io">
+<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-four-service-discovery/" /><link rel="prev" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Microservices Architecture Deep Dive Part Four: Service Discovery",
+        "inLanguage": "en-us",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/danish-mehmood.github.io\/microservices-architecture-deep-dive-part-four-service-discovery\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "https:\/\/danish-mehmood.github.io\/images\/posts\/microservices\/partfour\/featuredimage.jpg",
+                            "width":  950 ,
+                            "height":  654 
+                        }],"genre": "posts","keywords": "microservices, distributed systems","wordcount":  857 ,
+        "url": "https:\/\/danish-mehmood.github.io\/microservices-architecture-deep-dive-part-four-service-discovery\/","datePublished": "2024-12-05T23:10:52+05:00","dateModified": "2024-12-05T23:10:52+05:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "danish mehmood"
+            },"description": "Service discovery is an essential process in any distributed microservices environment, as it makes the environment scalable and solves a very specific communication problem. In this blog post I will go deep into this process and what are the different patterns used to implement this."
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="search the blog" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="search the blog" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Microservices Architecture Deep Dive Part Four: Service Discovery</h1><h2 class="single-subtitle">Service discovery is a process of locating and communicating with the other services in a highly distributed environment.</h2><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>danish mehmood</a></span>&nbsp;<span class="post-category">included in <a href="/categories/microservices/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>microservices</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-12-05">2024-12-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;857 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/microservices/partfour/featuredimage.jpg"
+        data-srcset="/images/posts/microservices/partfour/featuredimage.jpg, /images/posts/microservices/partfour/featuredimage.jpg 1.5x, /images/posts/microservices/partfour/featuredimage.jpg 2x"
+        data-sizes="auto"
+        alt="/images/posts/microservices/partfour/featuredimage.jpg"
+        title="Service discovery is an essential process in any distributed microservices environment, as it makes the environment scalable and solves a very specific communication problem. In this blog post I will go deep into this process and what are the different patterns used to implement this." width="950" height="654" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-problem">The Problem</a></li>
+    <li><a href="#the-solution-service-registry">The Solution: Service Registry</a>
+      <ul>
+        <li><a href="#the-process">The Process</a></li>
+        <li><a href="#health-checks">Health Checks</a>
+          <ul>
+            <li><a href="#heart-beat-check">Heart Beat Check</a></li>
+            <li><a href="#periodic-registration">Periodic Registration</a></li>
+          </ul>
+        </li>
+        <li><a href="#the-types-of-service-registry">The Types Of service Registry</a>
+          <ul>
+            <li><a href="#client-side-service-registry">Client Side Service Registry</a></li>
+            <li><a href="#server-side-service-registry">Server Side Service Registry</a></li>
+          </ul>
+        </li>
+        <li><a href="#well-known-service-registries">Well Known Service Registries</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Table Of Contents<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 1 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/" target="_blank" rel="noopener noreffer ">Microservices Architecture Deep Dive</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 2 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-two--api-gateways-and-bff-pattern/" target="_blank" rel="noopener noreffer ">API Gateways and Backend For Frontend Pattern</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 3 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/" target="_blank" rel="noopener noreffer ">Microservices Communication</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 4 - <strong>Service Discovery</strong> <i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>&nbsp;you are here <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i></p>
+</div>
+        </div>
+    </div>
+<h2 id="the-problem">The Problem</h2>
+<p>As i discussed in the <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/" target="_blank" rel="noopener noreffer ">last</a> blog post, the communication patterns in microservices are way different than the patterns in monoliths, in monoliths the modules communicate using <strong><em>method calls</em></strong> but in case of microservices, services communicate using the <strong><em>network calls</em></strong>.</p>
+<p>This small difference has <strong>massive</strong> implications, now the services which are involved in communication are living potentially on different machines and to communicate over the network the services would need to <strong>know</strong> each others IP addresses.</p>
+<p>The naive solution is to hard code the IP addresses of every service the communicating service needs to communicate with in the code, but this is not prudent in case of highly distributed environments like microservices.</p>
+<p><strong><em>But why?</em></strong></p>
+<p>the reason is this that modern microservices are deployed in <strong>containers</strong> and they are also auto scaled, scaled up and down, both ways. As a result all these microservice instances running are highly <strong><em>ephemeral</em></strong> and tools like <strong>kubernetes</strong> are used to make sure all the services are up all the time. And the way it makes sure that the services are up and running is by running new instances of the service when it notices some instance go down or being problematic.</p>
+<p>Due to all this the IP addresses of the services are no more static and they keep on changing. And our solution of <strong><em>hard coding</em></strong> the servies IP addresses is rendered obsolete.</p>
+<h2 id="the-solution-service-registry">The Solution: Service Registry</h2>
+<p>The solution is <strong>service registry</strong>, we would have an additional service running at all times, which would act as a registry for all the services in the environment. Every new service which would be available in the environment would register to the service registry.</p>
+<h3 id="the-process">The Process</h3>
+<ul>
+<li>The service registry is running on the known IP.</li>
+<li>each service in the environment would register itself to the registry, for instance there is this new service called <strong><em>service A</em></strong>, on the startup this service is required to register to the service registry first, so that it is locateable by other services in the environment.</li>
+<li>Now if <strong><em>service B</em></strong> wants to talk to <strong><em>service A</em></strong> it would go to service registry and service registry would give service B the address of service A so that they can communicate with each other.</li>
+</ul>
+<blockquote>
+<p>you see now we would not face any problem if the IP addresses of the service container are dynamic and ephemeral, because whenever the service comes up it is required to register to service registry.</p>
+</blockquote>
+<h3 id="health-checks">Health Checks</h3>
+<p>You may be wondering that how does the service registry know that some instance of the service has gone down and now past IP address is no more valid?
+for that service registry employs some method of service health check.</p>
+<h4 id="heart-beat-check">Heart Beat Check</h4>
+<p>some service registeries have a heart beat mechanism built in. service registry sends the periodic heart beats to registered services to know whether they are up or not, if they do not respond then the service IP is deemed invalid.</p>
+<h4 id="periodic-registration">Periodic Registration</h4>
+<p>some service registeries require registered services to register again after a regular interval of time, if they fail to do so the IP address associated with the service which failed to register would be deemed invalid.</p>
+<h3 id="the-types-of-service-registry">The Types Of service Registry</h3>
+<p>There are two main types of service registries, they differ in a way they go about the process of service discovery, the types are following</p>
+<ol>
+<li>client side service registery</li>
+<li>server side service registery</li>
+</ol>
+<h4 id="client-side-service-registry">Client Side Service Registry</h4>
+<p>Consider the following example.</p>
+<p>You want to order pizza, you know the place you want to order from but you don&rsquo;t know how to contact them, you go to <strong><em>google</em></strong> and search for the place and get their number, then you call them and order pizza.</p>
+<p>This is how the client side service registry works, in this example consider yourself <strong>service A</strong> the pizza place <strong>service B</strong> and google <strong>service registry</strong>. In client side registry you would ask the registry for the IP address and it will give you the IP address and then its you who contact the other service.</p>
+<h4 id="server-side-service-registry">Server Side Service Registry</h4>
+<p>Consider the following example.</p>
+<p>You want to contact the <strong>CEO</strong> of some company, you don&rsquo;t have the contact information of the CEO but you do know the <strong>exchange</strong> number of the company, you call the exchange and let them know you want to talk to CEO, they will not give you the CEO&rsquo;s phone number but instead would forward your call to the CEO themselves.</p>
+<p>This is exactly how the server side registry would work, <strong>service A</strong> would contact the <strong>registry</strong> and tell it that it wants to contact the <strong>service B</strong> unlike the client side registry it will not give the IP of service B to you instead it will contact service B it self and act like a proxy.</p>
+<h3 id="well-known-service-registries">Well Known Service Registries</h3>
+<p>the following are well known service registries</p>
+<ol>
+<li>Consul</li>
+<li>Eureka</li>
+<li>ETCD</li>
+<li>Zookeeper</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-12-05</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/microservices-architecture-deep-dive-part-four-service-discovery/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-four-service-discovery/" data-title="Microservices Architecture Deep Dive Part Four: Service Discovery" data-hashtags="microservices,distributed systems"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-four-service-discovery/" data-hashtag="microservices"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-four-service-discovery/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-four-service-discovery/" data-title="Microservices Architecture Deep Dive Part Four: Service Discovery"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/microservices/">microservices</a>,&nbsp;<a href="/tags/distributed-systems/">distributed systems</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/microservices-architecture-deep-dive-part-three-communications/" class="prev" rel="prev" title="Microservices Architecture Deep Dive Part Three: Communications"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Microservices Architecture Deep Dive Part Three: Communications</a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Danish Mehmood</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOMZSvQM4ChDiJ","darkTheme":"dark","emitMetadata":"1","inputPosition":"bottom","lang":"en","lazyLoading":true,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"danish-mehmood/Giscus","repoId":"R_kgDOMZSvQA"}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-1H67WDJ7JS');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-1H67WDJ7JS" async></script></body>
+</html>
