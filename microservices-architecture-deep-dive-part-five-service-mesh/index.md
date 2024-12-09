@@ -18,7 +18,7 @@
 
 Imagine you are working with a microservices architecture and you have 10s of services running, And these services work together by communicating with each other to achieve a goal. Now imagine every team working on different microservices built using different tech stack need to write the inter service communication logic by hand. Thats a waste of time and effort. Isn't it?.
 
-Because not only you have to call the services apis but you also need to handle things like retry logic, load balancing, api sercurity,service discovery, rate limiting, authentication, observeability and much more. Writing all this logic for every service in the system is **cumbersome** and **error prone**. Because now alot of logic is going in to writing the communication middleware for the service and not the actual logic of the service.
+Because not only you have to call the services apis but you also need to handle things like retry logic, load balancing, api sercurity,service discovery, rate limiting, authentication, observeability and much more. Writing all this logic for every service in the system is **cumbersome** and **error prone**. Because now alot of time is going in to writing the communication middleware for the service and not the actual logic of the service.
 
 ## The Solution
 

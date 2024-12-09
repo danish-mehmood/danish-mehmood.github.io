@@ -10,6 +10,8 @@
 :(fa-solid fa-arrow-right-long): Part 3 - [Microservices Communication](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/)
 
 :(fa-solid fa-arrow-right-long): Part 4 - **Service Discovery** :(fa-solid fa-arrow-left-long): you are here :(fa-solid fa-location-crosshairs):
+
+:(fa-solid fa-arrow-right-long): Part 5 - [Service Mesh](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/)
 {{< /admonition >}}
 
 ## The Problem
