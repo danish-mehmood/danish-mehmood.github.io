@@ -4,7 +4,22 @@
         <link>https://danish-mehmood.github.io/tags/microservices/</link>
         <description>microservices - Tag - danish-mehmood</description>
         <generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>rdm355190@gmail.com (Danish Mehmood)</managingEditor>
-            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Thu, 05 Dec 2024 23:10:52 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/tags/microservices/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Mon, 09 Dec 2024 23:19:42 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/tags/microservices/" rel="self" type="application/rss+xml" /><item>
+    <title>Microservices Architecture Deep Dive Part Five: Service Mesh</title>
+    <link>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/</link>
+    <pubDate>Mon, 09 Dec 2024 23:19:42 &#43;0500</pubDate>
+    <author>danish mehmood</author>
+    <guid>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/posts/microservices/partfive/featuredimage.gif" referrerpolicy="no-referrer">
+            </div>Table Of Contents <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 1 - Microservices Architecture Deep Dive
+<i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 2 - API Gateways and Backend For Frontend Pattern
+<i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 3 - Microservices Communication
+<i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 4 - Service Discovery
+<i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 5 - Service Mesh <i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>&nbsp;you are here <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i>
+The Problem Imagine you are working with a microservices architecture and you have 10s of services running, And these services work together by communicating with each other to achieve a goal.]]></description>
+</item>
+<item>
     <title>Microservices Architecture Deep Dive Part Four: Service Discovery</title>
     <link>https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-four-service-discovery/</link>
     <pubDate>Thu, 05 Dec 2024 23:10:52 &#43;0500</pubDate>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Microservices Architecture Deep Dive Part Five: Service Mesh - danish-mehmood</title><meta name="Description" content="In this blog post I discuss what service mesh is, what problem does it solve and what are best known service mesh products are"><meta property="og:title" content="Microservices Architecture Deep Dive Part Five: Service Mesh" />
+<meta property="og:description" content="In this blog post I discuss what service mesh is, what problem does it solve and what are best known service mesh products are" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/" /><meta property="og:image" content="https://danish-mehmood.github.io/images/posts/microservices/partfive/featuredimage.gif" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-12-09T23:19:42+05:00" />
+<meta property="article:modified_time" content="2024-12-09T23:19:42+05:00" /><meta property="og:site_name" content="danish-mehmood.io" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://danish-mehmood.github.io/images/posts/microservices/partfive/featuredimage.gif"/>
+
+<meta name="twitter:title" content="Microservices Architecture Deep Dive Part Five: Service Mesh"/>
+<meta name="twitter:description" content="In this blog post I discuss what service mesh is, what problem does it solve and what are best known service mesh products are"/>
+<meta name="application-name" content="danish-mehmood.io">
+<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/" /><link rel="prev" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-four-service-discovery/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Microservices Architecture Deep Dive Part Five: Service Mesh",
+        "inLanguage": "en-us",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/danish-mehmood.github.io\/microservices-architecture-deep-dive-part-five-service-mesh\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "https:\/\/danish-mehmood.github.io\/images\/posts\/microservices\/partfive\/featuredimage.gif",
+                            "width":  964 ,
+                            "height":  476 
+                        }],"genre": "posts","keywords": "microservices, distributed systems","wordcount":  1437 ,
+        "url": "https:\/\/danish-mehmood.github.io\/microservices-architecture-deep-dive-part-five-service-mesh\/","datePublished": "2024-12-09T23:19:42+05:00","dateModified": "2024-12-09T23:19:42+05:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "danish mehmood"
+            },"description": "In this blog post I discuss what service mesh is, what problem does it solve and what are best known service mesh products are"
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="search the blog" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="search the blog" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Microservices Architecture Deep Dive Part Five: Service Mesh</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>danish mehmood</a></span>&nbsp;<span class="post-category">included in <a href="/categories/microservices/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>microservices</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-12-09">2024-12-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1437 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/microservices/partfive/featuredimage.gif"
+        data-srcset="/images/posts/microservices/partfive/featuredimage.gif, /images/posts/microservices/partfive/featuredimage.gif 1.5x, /images/posts/microservices/partfive/featuredimage.gif 2x"
+        data-sizes="auto"
+        alt="/images/posts/microservices/partfive/featuredimage.gif"
+        title="In this blog post I discuss what service mesh is, what problem does it solve and what are best known service mesh products are" width="964" height="476" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-problem">The Problem</a></li>
+    <li><a href="#the-solution">The Solution</a></li>
+    <li><a href="#api-gateway-vs-service-mesh">API Gateway Vs Service Mesh</a>
+      <ul>
+        <li><a href="#api-gateway">API Gateway:</a></li>
+        <li><a href="#service-mesh">Service mesh:</a></li>
+      </ul>
+    </li>
+    <li><a href="#key-concepts">Key Concepts:</a></li>
+    <li><a href="#advantages-of-service-mesh">Advantages Of Service Mesh</a></li>
+    <li><a href="#disadvantages-of-service-mesh">Disadvantages Of Service Mesh</a></li>
+    <li><a href="#the-patterns">The Patterns</a>
+      <ul>
+        <li><a href="#sidecar-proxy-pattern">Sidecar Proxy Pattern</a></li>
+        <li><a href="#service-mesh-with-ebpf">Service Mesh with eBPF</a></li>
+        <li><a href="#sidecar-less-mesh-pattern">Sidecar-Less Mesh Pattern</a></li>
+      </ul>
+    </li>
+    <li><a href="#examples-of-service-mesh-software">Examples Of Service Mesh Software</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Table Of Contents<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 1 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/" target="_blank" rel="noopener noreffer ">Microservices Architecture Deep Dive</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 2 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-two--api-gateways-and-bff-pattern/" target="_blank" rel="noopener noreffer ">API Gateways and Backend For Frontend Pattern</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 3 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/" target="_blank" rel="noopener noreffer ">Microservices Communication</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 4 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/" target="_blank" rel="noopener noreffer ">Service Discovery</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 5 - <strong>Service Mesh</strong> <i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>&nbsp;you are here <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i></p>
+</div>
+        </div>
+    </div>
+<h2 id="the-problem">The Problem</h2>
+<p>Imagine you are working with a microservices architecture and you have 10s of services running, And these services work together by communicating with each other to achieve a goal. Now imagine every team working on different microservices built using different tech stack need to write the inter service communication logic by hand. Thats a waste of time and effort. Isn&rsquo;t it?.</p>
+<p>Because not only you have to call the services apis but you also need to handle things like retry logic, load balancing, api sercurity,service discovery, rate limiting, authentication, observeability and much more. Writing all this logic for every service in the system is <strong>cumbersome</strong> and <strong>error prone</strong>. Because now alot of logic is going in to writing the communication middleware for the service and not the actual logic of the service.</p>
+<h2 id="the-solution">The Solution</h2>
+<p>Service meshes present a very good solution to this problem, service mesh is a peice of software that abstracts away all the communication logic from the application layer and takes it to the network, now the application doesn&rsquo;t need to worry about the communication detail and only need to focus on the service logic itself.</p>
+<blockquote>
+<p>a service mesh is a dedicated infrastructure layer for facilitating service-to-service communications between services or microservices using a proxy.</p>
+</blockquote>
+<h2 id="api-gateway-vs-service-mesh">API Gateway Vs Service Mesh</h2>
+<p>API gateways and service meshes are two different architectural components that address different concerns in a microservices-based application. While they may have some overlapping functionality, they serve distinct purposes and are often used together for a comprehensive solution.</p>
+<h3 id="api-gateway">API Gateway:</h3>
+<ul>
+<li><strong>Edge component:</strong> An API gateway is an entry point for external clients (such as web browsers, mobile apps, or other services) to access the microservices in the application. It acts as a reverse proxy and a single point of entry for all incoming requests, abstracting the underlying microservices from the clients.</li>
+<li><strong>Request routing:</strong> It routes requests from clients to the appropriate microservices, based on the API path and other criteria.</li>
+<li><strong>Authentication and authorization:</strong> API gateways often handle authentication and authorization for incoming requests, ensuring that only authorized clients can access the microservices.</li>
+<li><strong>Rate limiting and throttling:</strong> It can enforce rate limiting and throttling policies on incoming requests to protect the application from being overwhelmed by excessive traffic.</li>
+<li><strong>API transformation and aggregation:</strong> An API gateway can modify or transform requests and responses, as well as aggregate data from multiple microservices to provide a cohesive response to the client.</li>
+</ul>
+<h3 id="service-mesh">Service mesh:</h3>
+<ul>
+<li><strong>Internal communication:</strong> A service mesh is primarily focused on managing, controlling, and observing communication between microservices within the distributed system, rather than external client requests.</li>
+<li><strong>Sidecar proxies:</strong> A service mesh uses lightweight network proxies (sidecars) deployed alongside each microservice, which handle inter-service traffic, enabling features like load balancing, traffic routing, and security enforcement.</li>
+<li><strong>Resilience and fault tolerance:</strong> It provides resiliency features like circuit breaking, retries, and timeouts to enhance the fault tolerance of the microservices communication.</li>
+<li><strong>Observability:</strong> A service mesh offers built-in observability for metrics, logs, and tracing, which enables in-depth monitoring and troubleshooting of microservices interactions.</li>
+<li><strong>Security:</strong> It can enforce security policies such as mutual TLS, ensuring secure and encrypted communication between microservices.</li>
+</ul>
+<blockquote>
+<p>In summary, an API gateway is focused on managing external client access to microservices, whereas a service mesh manages communication between microservices within the distributed system. Both components can complement each other, with the API gateway serving as the ingress point for external requests and the service mesh ensuring reliable and secure communication within the application.</p>
+</blockquote>
+<h2 id="key-concepts">Key Concepts:</h2>
+<p>Service mesh architecture is designed to provide a dedicated infrastructure layer for managing, controlling, and observing communication between microservices in a distributed system. Key components and concepts of service mesh architecture include:</p>
+<ol>
+<li>
+<p><strong>Data Plane</strong>
+The data plane is responsible for managing the traffic between microservices. It consists of lightweight network proxies, called sidecars, that are deployed alongside each microservice instance. Sidecars intercept and manage inter-service communication, handling tasks such as load balancing, traffic routing, and enforcing security policies.</p>
+</li>
+<li>
+<p><strong>Control Plane</strong>
+The control plane is the central management layer of the service mesh, responsible for configuring and monitoring the data plane. It provides an interface for users to define and enforce policies, configurations, and traffic rules. The control plane also collects metrics, logs, and tracing information from the sidecars to provide observability into the microservices’ communication.</p>
+</li>
+<li>
+<p><strong>Sidecar Proxy</strong>
+A sidecar proxy is a lightweight network proxy deployed alongside each microservice instance, which intercepts and manages the traffic between microservices. Sidecar proxies are typically implemented using technologies like Envoy or Linkerd. They are responsible for load balancing, traffic routing, circuit breaking, retries, timeouts, and enforcing security policies such as mutual TLS.</p>
+</li>
+<li>
+<p><strong>Traffic Management</strong>
+A service mesh enables fine-grained traffic management, allowing users to control and manipulate the flow of traffic between microservices. This includes features such as request routing based on criteria like headers, weights, or versions, load balancing algorithms, fault injection for testing purposes, and traffic shifting for canary deployments or blue-green rollouts.</p>
+</li>
+<li>
+<p><strong>Observability</strong>
+A service mesh provides built-in observability for the entire microservices ecosystem. It typically includes collecting metrics for performance and resource usage, distributed tracing for end-to-end visibility of request flows, and log aggregation for troubleshooting and analysis. This information can be consumed by monitoring and visualization tools, helping users understand the behavior and health of their microservices.</p>
+</li>
+<li>
+<p><strong>Security</strong>
+A service mesh can enhance the security of microservices communication by providing features like mutual TLS for encrypting traffic and ensuring the identity of communicating services. Additionally, it can enforce fine-grained access control policies based on various criteria such as service identity, request attributes, or metadata.</p>
+</li>
+<li>
+<p><strong>Resiliency</strong>
+The service mesh architecture helps increase the overall resiliency of microservices-based applications by providing features like circuit breaking, retries, and timeouts, which mitigate the impact of failures, delays, and network issues. These features help improve the fault tolerance of the system and ensure the availability of critical services.</p>
+</li>
+</ol>
+<blockquote>
+<p>In a service mesh architecture, the data plane and control plane work together to provide a comprehensive solution for managing, controlling, and observing microservices communication, allowing developers to focus on their application’s business logic while the service mesh handles the complexities of inter-service communication.</p>
+</blockquote>
+<h2 id="advantages-of-service-mesh">Advantages Of Service Mesh</h2>
+<ol>
+<li><strong>Advanced Traffic Management</strong></li>
+</ol>
+<p>Enables fine-grained control over traffic routing, including canary deployments, blue-green deployments, and traffic splitting based on specific conditions.</p>
+<ol start="2">
+<li><strong>Service Discovery and Load Balancing</strong></li>
+</ol>
+<p>Automatically discovers services and ensures optimal load balancing between instances.</p>
+<ol start="3">
+<li><strong>Observability</strong></li>
+</ol>
+<p>Provides deep insights into system behavior through distributed tracing, metrics, and logging without modifying application code.</p>
+<ol start="4">
+<li><strong>Enhanced Security</strong></li>
+</ol>
+<p>Facilitates mutual TLS (mTLS) encryption for service-to-service communication and enforces security policies at the network level.</p>
+<ol start="5">
+<li><strong>Fault Tolerance</strong></li>
+</ol>
+<p>Includes built-in mechanisms such as retries, timeouts, circuit breakers, and rate limiting to improve resilience.</p>
+<ol start="6">
+<li><strong>Policy Enforcement</strong></li>
+</ol>
+<p>Allows the implementation of custom policies for traffic control, authentication, authorization, and rate limiting.</p>
+<ol start="7">
+<li><strong>Decoupling Communication Logic</strong></li>
+</ol>
+<p>Removes communication-related concerns (e.g., retries, encryption, and telemetry) from application code, simplifying the development process.</p>
+<h2 id="disadvantages-of-service-mesh">Disadvantages Of Service Mesh</h2>
+<ol>
+<li><strong>Increased Complexity</strong></li>
+</ol>
+<p>Adds an additional layer to the architecture, requiring expertise to configure, deploy, and maintain effectively.</p>
+<ol start="2">
+<li><strong>Performance Overhead</strong></li>
+</ol>
+<p>The sidecar proxies in a service mesh introduce latency and consume additional CPU and memory resources.</p>
+<ol start="3">
+<li><strong>Operational Overhead</strong></li>
+</ol>
+<p>Requires setting up and maintaining the service mesh infrastructure, which may include upgrades, troubleshooting, and monitoring.</p>
+<ol start="4">
+<li><strong>Learning Curve</strong></li>
+</ol>
+<p>Teams must invest time to understand service mesh concepts, tools, and configuration.</p>
+<ol start="5">
+<li><strong>Cost Implications</strong></li>
+</ol>
+<p>More resources (compute, network, and storage) are needed to run the service mesh components, potentially increasing operational costs.</p>
+<ol start="6">
+<li><strong>Risk of Overengineering</strong></li>
+</ol>
+<p>For small-scale systems or simple use cases, implementing a service mesh might be unnecessary and lead to overengineering.</p>
+<ol start="7">
+<li><strong>Compatibility Issues</strong></li>
+</ol>
+<p>Integrating a service mesh with existing legacy systems or specific protocols might be challenging.</p>
+<h2 id="the-patterns">The Patterns</h2>
+<h3 id="sidecar-proxy-pattern">Sidecar Proxy Pattern</h3>
+<p>This is the most popular and foundational pattern in service mesh architecture.</p>
+<p>A proxy (like Envoy) runs alongside each application instance in the same pod (in Kubernetes) or host.
+The proxy intercepts all inbound and outbound traffic, handling routing, observability, and security.</p>
+<h3 id="service-mesh-with-ebpf">Service Mesh with eBPF</h3>
+<p>This Uses <a href="https://ebpf.io/" target="_blank" rel="noopener noreffer ">EBPF</a> (Extended Berkeley Packet Filter) in the Linux kernel to handle communication.
+Avoids traditional proxies by running network-related operations directly in the kernel.</p>
+<h3 id="sidecar-less-mesh-pattern">Sidecar-Less Mesh Pattern</h3>
+<p>Removes the need for individual sidecars by embedding proxy logic into the node or network infrastructure.
+The mesh logic can be integrated into the application runtime or centralized.</p>
+<h2 id="examples-of-service-mesh-software">Examples Of Service Mesh Software</h2>
+<ul>
+<li>Likerd</li>
+<li>Consul</li>
+<li>Istio</li>
+<li>Cilium</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-12-09</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/microservices-architecture-deep-dive-part-five-service-mesh/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/" data-title="Microservices Architecture Deep Dive Part Five: Service Mesh" data-hashtags="microservices,distributed systems"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/" data-hashtag="microservices"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/" data-title="Microservices Architecture Deep Dive Part Five: Service Mesh"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/microservices/">microservices</a>,&nbsp;<a href="/tags/distributed-systems/">distributed systems</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/microservices-architecture-deep-dive-part-four-service-discovery/" class="prev" rel="prev" title="Microservices Architecture Deep Dive Part Four: Service Discovery"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Microservices Architecture Deep Dive Part Four: Service Discovery</a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Danish Mehmood</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOMZSvQM4ChDiJ","darkTheme":"dark","emitMetadata":"1","inputPosition":"bottom","lang":"en","lazyLoading":true,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"danish-mehmood/Giscus","repoId":"R_kgDOMZSvQA"}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-1H67WDJ7JS');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-1H67WDJ7JS" async></script></body>
+</html>
