@@ -13,7 +13,7 @@
 
 :(fa-solid fa-arrow-right-long): Part 5 - [Service Mesh](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/)
 
-:(fa-solid fa-arrow-right-long): Part 5 - [Distributed Transactions](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/)
+:(fa-solid fa-arrow-right-long): Part 5 - [Distributed Transactions](https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-six-distributed-transactions/)
 {{< /admonition >}}
 
 ## The Problem
