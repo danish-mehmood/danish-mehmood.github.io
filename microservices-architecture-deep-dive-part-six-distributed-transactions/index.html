@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Microservices Architecture Deep Dive Part Six: Distributed Transactions - danish-mehmood</title><meta name="Description" content="Dive deep into tech"><meta property="og:title" content="Microservices Architecture Deep Dive Part Six: Distributed Transactions" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-six-distributed-transactions/" /><meta property="og:image" content="https://danish-mehmood.github.io/images/posts/microservices/partsix/featuredimage.webp" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-12-26T01:46:08+05:00" />
+<meta property="article:modified_time" content="2024-12-26T01:46:08+05:00" /><meta property="og:site_name" content="danish-mehmood.io" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://danish-mehmood.github.io/images/posts/microservices/partsix/featuredimage.webp"/>
+
+<meta name="twitter:title" content="Microservices Architecture Deep Dive Part Six: Distributed Transactions"/>
+<meta name="twitter:description" content=""/>
+<meta name="application-name" content="danish-mehmood.io">
+<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-six-distributed-transactions/" /><link rel="prev" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Microservices Architecture Deep Dive Part Six: Distributed Transactions",
+        "inLanguage": "en-us",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/danish-mehmood.github.io\/microservices-architecture-deep-dive-part-six-distributed-transactions\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "https:\/\/danish-mehmood.github.io\/images\/posts\/microservices\/partsix\/featuredimage.webp",
+                            "width":  2348 ,
+                            "height":  996 
+                        }],"genre": "posts","keywords": "microservices, distributed systems","wordcount":  1262 ,
+        "url": "https:\/\/danish-mehmood.github.io\/microservices-architecture-deep-dive-part-six-distributed-transactions\/","datePublished": "2024-12-26T01:46:08+05:00","dateModified": "2024-12-26T01:46:08+05:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "danish mehmood"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="search the blog" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="search the blog" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Microservices Architecture Deep Dive Part Six: Distributed Transactions</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>danish mehmood</a></span>&nbsp;<span class="post-category">included in <a href="/categories/microservices/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>microservices</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-12-26">2024-12-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1262 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;6 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/microservices/partsix/featuredimage.webp"
+        data-srcset="/images/posts/microservices/partsix/featuredimage.webp, /images/posts/microservices/partsix/featuredimage.webp 1.5x, /images/posts/microservices/partsix/featuredimage.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/microservices/partsix/featuredimage.webp"
+        title="/images/posts/microservices/partsix/featuredimage.webp" width="2348" height="996" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-is-a-transaction">What Is A Transaction?</a></li>
+    <li><a href="#the-problem">The Problem</a></li>
+    <li><a href="#distributed-transaction">Distributed Transaction</a></li>
+    <li><a href="#the-consistency-challenges">The Consistency Challenges</a></li>
+    <li><a href="#the-solution">The Solution</a>
+      <ul>
+        <li><a href="#example-system-travel-booking">Example System: Travel Booking</a>
+          <ul>
+            <li><a href="#orchestration-and-choreography">Orchestration And Choreography</a>
+              <ul>
+                <li><a href="#1-orchestration">1. Orchestration</a></li>
+                <li><a href="#2-choreography">2. Choreography</a></li>
+                <li><a href="#saga-pattern">Saga Pattern</a></li>
+                <li><a href="#two-phase-commit">Two Phase Commit</a></li>
+                <li><a href="#comparison">Comparison</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Table Of Contents<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 1 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-one/" target="_blank" rel="noopener noreffer ">Microservices Architecture Deep Dive</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 2 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-two--api-gateways-and-bff-pattern/" target="_blank" rel="noopener noreffer ">API Gateways and Backend For Frontend Pattern</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 3 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/" target="_blank" rel="noopener noreffer ">Microservices Communication</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 4 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-three-communications/" target="_blank" rel="noopener noreffer ">Service Discovery</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 5 - <a href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-five-service-mesh/" target="_blank" rel="noopener noreffer ">Service Mesh</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 6 - <strong>Distributed Transactions</strong> <i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>&nbsp;you are here <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i></p>
+</div>
+        </div>
+    </div>
+<h2 id="what-is-a-transaction">What Is A Transaction?</h2>
+<p>A database transaction symbolizes a unit of work, performed within a database management system (or similar system) against a database, that is treated in a coherent and reliable way independent of other transactions. A transaction generally represents any change in a database.</p>
+<p>In a database management system, a transaction is a single unit of logic or work, sometimes made up of multiple operations. Any logical calculation done in a consistent mode in a database is known as a transaction. One example is a transfer from one bank account to another: the complete transaction requires subtracting the amount to be transferred from one account and adding that same amount to the other.</p>
+<p>A database transaction, by definition, must be atomic (it must either be complete in its entirety or have no effect whatsoever), consistent (it must conform to existing constraints in the database), isolated (it must not affect other transactions) and durable (it must get written to persistent storage).Database practitioners often refer to these properties of database transactions using the acronym ACID.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>In a monolithic architecture getting the transaction ACID properties right was already very difficult. People from the past and the present have worked tirelessly to make the database transactions ACID. But now we have an entirely different problem regarding database transactions.</p>
+<p>Now we have a distributed microservices architecture in which every service has its own database, but for the end user all these microservices combine and make up a single service and the end user can not tell the difference. Thats the end goal of distributed systems.</p>
+<p>But Now what previously needed to be ACID transaction on a single database has to be ACID over multiple microservices databases.</p>
+<h2 id="distributed-transaction">Distributed Transaction</h2>
+<p>A distributed transaction operates within a distributed environment, typically involving multiple nodes across a network depending on the location of the data. A key aspect of distributed transactions is atomicity, which ensures that the transaction is completed in its entirety or not executed at all. It&rsquo;s essential to note that distributed transactions are not limited to databases.</p>
+<p>Databases are common transactional resources and, often, transactions span a couple of such databases. In this case, a distributed transaction can be seen as a database transaction that must be synchronized (or provide ACID properties) among multiple participating databases which are distributed among different physical locations. The isolation property (the I of ACID) poses a special challenge for multi database transactions, since the (global) serializability property could be violated, even if each database provides it.</p>
+<h2 id="the-consistency-challenges">The Consistency Challenges</h2>
+<p>Distributed transactions are more complex than transactions on a single-instance database because we need some way to ensure that each database node is consistent with the others.</p>
+<p>The diagram below illustrates one potential problem with distributed transactions. Imagine we have an application attempting to commit a transaction to three separate database nodes (perhaps the same data is replicated on all three nodes, or perhaps the transaction affects multiple rows, and the different rows are stored on different nodes). In the diagram, the transaction is successfully written to the first two nodes, but fails to write to the third — perhaps due to a network disconnection or an error on the node itself. This introduces a state of inconsistency — the first two nodes and the third node “disagree” about what data is correct.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/microservices/partsix/consistency.jpg"
+        data-srcset="/images/posts/microservices/partsix/consistency.jpg, /images/posts/microservices/partsix/consistency.jpg 1.5x, /images/posts/microservices/partsix/consistency.jpg 2x"
+        data-sizes="auto"
+        alt="/images/posts/microservices/partsix/consistency.jpg"
+        title="consistency problem" width="960" height="540" /></p>
+<p>Needless to say, inconsistency in a database can cause all kinds of problems, particularly when it comes to the kinds of workloads that use transactions (payment processing systems, for example).</p>
+<p>So, how can we ensure our database remains consistent even when it is partitioned across multiple nodes? There are a variety of approaches, each with its own advantages and disadvantages. Let’s take a look at some real-world examples of workable patterns for distributed transactions.</p>
+<h2 id="the-solution">The Solution</h2>
+<p>In the following paragraphy i will explain the ways in which distributed transaction are done in the wild using an example.</p>
+<h3 id="example-system-travel-booking">Example System: Travel Booking</h3>
+<p><strong>Scenario:</strong></p>
+<p>A user books a vacation package. The process includes:</p>
+<ol>
+<li>Flight Service: Books a flight.</li>
+<li>Hotel Service: Reserves a hotel room.</li>
+<li>Car Rental Service: Reserves a rental car.</li>
+</ol>
+<p>Each service operates independently but must work together to fulfill the booking. A failure in any service should result in a rollback.</p>
+<h4 id="orchestration-and-choreography">Orchestration And Choreography</h4>
+<h5 id="1-orchestration">1. Orchestration</h5>
+<p>In orchestration there needs to be a coordinator (a central controller ) which manages the entire workflow.</p>
+<p><strong>How it works:</strong></p>
+<p>The Travel Booking Orchestrator service calls the Flight, Hotel, and Car Rental services in sequence.
+If a failure occurs (e.g., flight booking fails), the orchestrator initiates compensating actions (e.g., cancel hotel and car reservations).</p>
+<p><strong>Flow:</strong></p>
+<ol>
+<li>User sends a booking request to the orchestrator.</li>
+<li>Orchestrator calls the Flight Service.</li>
+<li>If successful, it calls the Hotel Service.</li>
+<li>If successful, it calls the Car Rental Service.</li>
+<li>If any service fails, orchestrator rolls back previous bookings.</li>
+</ol>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Centralized control simplifies monitoring and debugging.</li>
+<li>Easier to implement retries and compensations.</li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Orchestrator becomes a single point of failure.</li>
+<li>Tight coupling between orchestrator and services.</li>
+</ul>
+<h5 id="2-choreography">2. Choreography</h5>
+<p>Each service acts independently and reacts to events.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>The Flight Service publishes an event (FlightBooked) after successful booking.</li>
+<li>The Hotel Service listens to FlightBooked and books a hotel, then publishes HotelBooked.</li>
+<li>The Car Rental Service listens to HotelBooked and reserves a car.</li>
+<li>If a failure occurs, services handle compensations independently.</li>
+</ol>
+<p><strong>Flow:</strong></p>
+<ol>
+<li>User sends a booking request to the Flight Service.</li>
+<li>Flight Service publishes a FlightBooked event.</li>
+<li>Hotel Service subscribes to FlightBooked and publishes HotelBooked after success.</li>
+<li>Car Rental Service subscribes to HotelBooked and proceeds similarly.</li>
+</ol>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Decentralized, no single point of failure.</li>
+<li>Loose coupling improves service independence.</li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Complex to manage compensating actions.</li>
+<li>Debugging and monitoring are harder.</li>
+</ul>
+<h5 id="saga-pattern">Saga Pattern</h5>
+<p>Saga divides the transaction into a series of steps, each with a compensating action if it fails.</p>
+<p><strong>In our example:</strong></p>
+<ol>
+<li>Flight Service books a flight. If it fails, no action is needed (initial step).</li>
+<li>Hotel Service reserves a hotel. If it fails, it cancels the hotel reservation.</li>
+<li>Car Rental Service reserves a car. If it fails, it cancels the car reservation.</li>
+<li>If any service fails, previous steps execute compensating actions in reverse order.</li>
+</ol>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Scales well with microservices.</li>
+<li>Better performance since each step commits locally.</li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Complex to design compensating actions.</li>
+<li>No strict consistency; eventual consistency is guaranteed.</li>
+</ul>
+<blockquote>
+<p>The saga pattern could be implemented as a <strong>Choreographed</strong> as well as <strong>Orchestrated</strong> process but mostly its always Choreographed.</p>
+</blockquote>
+<h5 id="two-phase-commit">Two Phase Commit</h5>
+<p>2PC is a protocol to ensure strict consistency across distributed services.</p>
+<p><strong>In our example:</strong></p>
+<p><strong>Phase 1: Prepare</strong></p>
+<ul>
+<li>Flight, Hotel, and Car Rental services prepare resources and lock them.</li>
+<li>They notify the coordinator (a central transaction manager) of readiness.</li>
+</ul>
+<p><strong>Phase 2: Commit or Rollback</strong></p>
+<ul>
+<li>If all services are ready, the coordinator sends a &ldquo;commit&rdquo; command.</li>
+<li>If any service fails, the coordinator sends a &ldquo;rollback&rdquo; command.</li>
+</ul>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>Ensures strict consistency.</li>
+<li>Ideal for transactional systems requiring ACID compliance.</li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Poor scalability, locks may reduce performance.</li>
+<li>Single point of failure if the coordinator crashes.</li>
+</ul>
+<blockquote>
+<p>the 2PC is always <strong>Orchestrated</strong></p>
+</blockquote>
+<h5 id="comparison">Comparison</h5>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Saga</th>
+<th>Two-Phase Commit (2PC)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Consistency</strong></td>
+<td>Eventual consistency</td>
+<td>Strict consistency</td>
+</tr>
+<tr>
+<td><strong>Performance</strong></td>
+<td>High</td>
+<td>Low (due to locking)</td>
+</tr>
+<tr>
+<td><strong>Failure Handling</strong></td>
+<td>Compensating actions</td>
+<td>Rollback entire transaction</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>High (due to compensations)</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>Scalability</strong></td>
+<td>Scales well</td>
+<td>Limited scalability</td>
+</tr>
+<tr>
+<td><strong>Best Use Case</strong></td>
+<td>Microservices, high scale</td>
+<td>ACID transactions</td>
+</tr>
+</tbody>
+</table></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-12-26</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/microservices-architecture-deep-dive-part-six-distributed-transactions/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-six-distributed-transactions/" data-title="Microservices Architecture Deep Dive Part Six: Distributed Transactions" data-hashtags="microservices,distributed systems"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-six-distributed-transactions/" data-hashtag="microservices"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-six-distributed-transactions/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-six-distributed-transactions/" data-title="Microservices Architecture Deep Dive Part Six: Distributed Transactions"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/microservices/">microservices</a>,&nbsp;<a href="/tags/distributed-systems/">distributed systems</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/microservices-architecture-deep-dive-part-five-service-mesh/" class="prev" rel="prev" title="Microservices Architecture Deep Dive Part Five: Service Mesh"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Microservices Architecture Deep Dive Part Five: Service Mesh</a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Danish Mehmood</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOMZSvQM4ChDiJ","darkTheme":"dark","emitMetadata":"1","inputPosition":"bottom","lang":"en","lazyLoading":true,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"danish-mehmood/Giscus","repoId":"R_kgDOMZSvQA"}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-1H67WDJ7JS');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-1H67WDJ7JS" async></script></body>
+</html>
