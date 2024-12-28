@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>networking - Tag - danish-mehmood</title>
+        <link>https://danish-mehmood.github.io/tags/networking/</link>
+        <description>networking - Tag - danish-mehmood</description>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>rdm355190@gmail.com (Danish Mehmood)</managingEditor>
+            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Sat, 28 Dec 2024 20:58:03 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/tags/networking/" rel="self" type="application/rss+xml" /><item>
+    <title>SSL/TLS Deep Dive</title>
+    <link>https://danish-mehmood.github.io/tls-deep-dive/</link>
+    <pubDate>Sat, 28 Dec 2024 20:58:03 &#43;0500</pubDate>
+    <author>Author</author>
+    <guid>https://danish-mehmood.github.io/tls-deep-dive/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/posts/TLS/featuredimage.webp" referrerpolicy="no-referrer">
+            </div>]]></description>
+</item>
+</channel>
+</rss>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>SSL/TLS Deep Dive - danish-mehmood</title><meta name="Description" content="Dive deep into tech"><meta property="og:title" content="SSL/TLS Deep Dive" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://danish-mehmood.github.io/tls-deep-dive/" /><meta property="og:image" content="https://danish-mehmood.github.io/images/posts/TLS/featuredimage.webp" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-12-28T20:58:03+05:00" />
+<meta property="article:modified_time" content="2024-12-28T20:58:03+05:00" /><meta property="og:site_name" content="danish-mehmood.io" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://danish-mehmood.github.io/images/posts/TLS/featuredimage.webp"/>
+
+<meta name="twitter:title" content="SSL/TLS Deep Dive"/>
+<meta name="twitter:description" content=""/>
+<meta name="application-name" content="danish-mehmood.io">
+<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/tls-deep-dive/" /><link rel="prev" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-six-distributed-transactions/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "SSL/TLS Deep Dive",
+        "inLanguage": "en-us",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/danish-mehmood.github.io\/tls-deep-dive\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "https:\/\/danish-mehmood.github.io\/images\/posts\/TLS\/featuredimage.webp",
+                            "width":  640 ,
+                            "height":  320 
+                        }],"genre": "posts","keywords": "networking, security","wordcount":  1038 ,
+        "url": "https:\/\/danish-mehmood.github.io\/tls-deep-dive\/","datePublished": "2024-12-28T20:58:03+05:00","dateModified": "2024-12-28T20:58:03+05:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Danish Mehmood"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="search the blog" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="search the blog" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SSL/TLS Deep Dive</h1><h2 class="single-subtitle">everything there is to know about secure sockets layer / transport layer security</h2><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Danish Mehmood</a></span>&nbsp;<span class="post-category">included in <a href="/categories/networking/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>networking</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-12-28">2024-12-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1038 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/featuredimage.webp"
+        data-srcset="/images/posts/TLS/featuredimage.webp, /images/posts/TLS/featuredimage.webp 1.5x, /images/posts/TLS/featuredimage.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/featuredimage.webp"
+        title="/images/posts/TLS/featuredimage.webp" width="640" height="320" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-this-blog-post-is-about">What This Blog Post Is About</a></li>
+    <li><a href="#the-problem-and-the-solution">The Problem And The Solution</a>
+      <ul>
+        <li><a href="#internet-http-and-https">Internet, HTTP, and HTTPS</a></li>
+      </ul>
+    </li>
+    <li><a href="#how-does-tls-accomplish-data-security">How Does TLS Accomplish Data Security?</a></li>
+    <li><a href="#what-should-tls-do-to-data-to-make-communication-safe">What Should TLS Do To Data To Make Communication Safe?📡</a></li>
+    <li><a href="#some-web-related-attacks-for-perspective">Some Web-related Attacks For Perspective</a>
+      <ul>
+        <li><a href="#tls-is-anti-replay">TLS Is Anti-Replay:</a></li>
+        <li><a href="#tls-promotes-non-repudiation">TLS Promotes Non-Repudiation:</a></li>
+      </ul>
+    </li>
+    <li><a href="#the-end">The End</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><blockquote>
+<p>Disclaimer: I will use the term TLS instead of SSL in this blog to get rid of me writing and you reading “SSL/TLS“ again and again, TLS and SSL are different versions of the same protocol and TLS is the one in use.</p>
+</blockquote>
+<h2 id="what-this-blog-post-is-about">What This Blog Post Is About</h2>
+<p>This deep dive would be a one-stop guide for anyone trying to grok Transport layer security.</p>
+<p>This guide will be broken down into multiple blog entries “this“ being the first of many, so that no one reading this deep dive gets overwhelmed or bogged down by details. this strategy provides necessary pauses and enough time for anyone to assimilate the provided information.</p>
+<p>TLS/SSL is not hard to understand but there is so much to cover, to understand TLS we first need to provide a wider context for it, persevere through this deep dive and I guarantee you will understand TLS.</p>
+<p><strong><em>This blog series will cover more or less following topics</em></strong></p>
+<p><strong><em>what problem does TLS solve, what are the primitives, what claims does it make, what is a public-private key, what is a digital signature, what are certificates, certificate authorities, certificate chains, replay attacks, non-repudiation, public key infra, integrity, TLS versions and more…</em></strong></p>
+<p>let’s dive 🤿…..</p>
+<h2 id="the-problem-and-the-solution">The Problem And The Solution</h2>
+<h3 id="internet-http-and-https">Internet, HTTP, and HTTPS</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/tunnel.webp"
+        data-srcset="/images/posts/TLS/tunnel.webp, /images/posts/TLS/tunnel.webp 1.5x, /images/posts/TLS/tunnel.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/tunnel.webp"
+        title="tunnel" width="678" height="237" /></p>
+<p>keep in mind that the above image is good for understanding the technology at hand but it is a model and not the reality so view it abstractly while reading further.</p>
+<p>The Internet is a big network of interconnected routers (not only routers but let’s simplify) as you can see in the above image. the job of this internetwork is to take the data packets from node at point 1 to node at point 2.</p>
+<p>consider a client requests the server for an HTML page, the server will prepare the HTML and send it back to the client and the client will display the HTML.</p>
+<p><strong><em>there are 2 very simple yet nontrivial points you have to keep in mind regarding this communication</em></strong> 📑</p>
+<ul>
+<li>
+<p>There is no encryption involved in this very simple communication I described</p>
+</li>
+<li>
+<p>And once the data leaves the client or the server, the client and server lose control of the data, It is the job of the internet to route data however it wants</p>
+</li>
+</ul>
+<p>note that the majority of the traffic on the internet is from websites and websites don’t always present information, sometimes they want to retrieve information from the users as well.</p>
+<p>for example passwords or bank information.</p>
+<p>communicating such information between the nodes using the aforementioned model of communication would be stupid, as anyone between the client and server could eavesdrop and read what is being sent.</p>
+<p><strong>Do you see the problem?</strong> 🎯</p>
+<p>This is the problem TLS is trying to solve, TLS before communicating anything on the internet creates a secure tunnel through which the information flows.</p>
+<p>HTTP which uses TLS is called HTTPS, there is no other difference, but HTTP is not the only protocol for which TLS is tailored, TLS is generic and it does not care about the protocol underlying it, some other applications of TLS include FTPS and TLS VPN using which you can use your company’s network sitting at home.</p>
+<h2 id="how-does-tls-accomplish-data-security">How Does TLS Accomplish Data Security?</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/tls.webp"
+        data-srcset="/images/posts/TLS/tls.webp, /images/posts/TLS/tls.webp 1.5x, /images/posts/TLS/tls.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/tls.webp"
+        title="tls" width="1456" height="525" />
+<strong><em>Note: It is very important to understand two things</em></strong></p>
+<ol>
+<li>
+<p>TLS does not <strong><em>literally</em></strong> create a tunnel because as you may or may not know internet uses a model called packet switching to transfer data ( basically in a packet-switched network every data packet takes a different route instead of taking one dedicated route ). <strong><em>So how could TLS create a tunnel?</em></strong></p>
+</li>
+<li>
+<p>second TLS does not encrypt the underlying protocol headers as TLS operates on the Transport layer it won’t encrypt the TCP or IP headers but rather it would encrypt the payload like passwords or bank information</p>
+</li>
+</ol>
+<h2 id="what-should-tls-do-to-data-to-make-communication-safe">What Should TLS Do To Data To Make Communication Safe?📡</h2>
+<blockquote>
+<p>Recap, when I said the data leaves the node, it is not in our control anymore, anyone can read our sent data, someone reading our data on the wire is called a man-in-a-middle attack, remember TLS can not just prevent the man-in-the-middle from getting the packets but it can encrypt the data captured by middle man to render it useless to the middle man.</p>
+</blockquote>
+<p>TLS provides 3 main services</p>
+<p><strong>1. Confidentiality:</strong> only the entities for whom data is meant could read the data, this service is provided using encryption.</p>
+<p><strong>2. Integrity:</strong> data is not susceptible to change on the wire it should reach the recipient as it left the sender (no changes not even an extra period or space ), this service is provided by hashing.</p>
+<p><strong>3. Authentication:</strong> the third and last service of TLS is to make sure that people or parties are who they claim to be, this service is provided using <strong><em>public key infrastructure</em></strong>.</p>
+<blockquote>
+<p>To understand these services we need to first discuss some cryptography primitives which I will write about in the future part of this blog series.</p>
+</blockquote>
+<h2 id="some-web-related-attacks-for-perspective">Some Web-related Attacks For Perspective</h2>
+<h3 id="tls-is-anti-replay">TLS Is Anti-Replay:</h3>
+<p>Replay attacks are very common on the web in which a malicious user could intercept the user’s requests and later on replay those requests to achieve some bad motives.</p>
+<p>For example, if the user is using a bank website to transfer funds of $100 and the man in the middle captures the request and replays to request multiple times to empty the user account</p>
+<p>TLS prevents these kinds of attacks using sequence numbers for every request and if the request with the same sequence number is repeated it is rejected.</p>
+<h3 id="tls-promotes-non-repudiation">TLS Promotes Non-Repudiation:</h3>
+<p>Google defines repudiation in the following way</p>
+<blockquote>
+<p>to refuse to have anything to do with</p>
+</blockquote>
+<p>If someone sends you something on the internet and later refuses to accept that they sent you anything , this won’t be possible because of 2 services that TLS provides namely Integration and Authentication.</p>
+<h2 id="the-end">The End</h2>
+<p>This is it for this blog entry in future posts I will go deeper into the implementation and consequences of TLS. giving all this context before going deep was very important to cement the understanding</p>
+<p>I hope now you have understood the motivations for having a protocol like TLS and looking forward to understanding more deeply.</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-12-28</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/tls-deep-dive/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://danish-mehmood.github.io/tls-deep-dive/" data-title="SSL/TLS Deep Dive" data-hashtags="networking,security"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://danish-mehmood.github.io/tls-deep-dive/" data-hashtag="networking"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://danish-mehmood.github.io/tls-deep-dive/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://danish-mehmood.github.io/tls-deep-dive/" data-title="SSL/TLS Deep Dive"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/networking/">networking</a>,&nbsp;<a href="/tags/security/">security</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/microservices-architecture-deep-dive-part-six-distributed-transactions/" class="prev" rel="prev" title="Microservices Architecture Deep Dive Part Six: Distributed Transactions"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Microservices Architecture Deep Dive Part Six: Distributed Transactions</a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Danish Mehmood</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOMZSvQM4ChDiJ","darkTheme":"dark","emitMetadata":"1","inputPosition":"bottom","lang":"en","lazyLoading":true,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"danish-mehmood/Giscus","repoId":"R_kgDOMZSvQA"}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-1H67WDJ7JS');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-1H67WDJ7JS" async></script></body>
+</html>
