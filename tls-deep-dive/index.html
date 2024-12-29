@@ -17,7 +17,7 @@
 <meta name="twitter:title" content="SSL/TLS Deep Dive"/>
 <meta name="twitter:description" content=""/>
 <meta name="application-name" content="danish-mehmood.io">
-<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/tls-deep-dive/" /><link rel="prev" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-six-distributed-transactions/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/tls-deep-dive/" /><link rel="prev" href="https://danish-mehmood.github.io/microservices-architecture-deep-dive-part-six-distributed-transactions/" /><link rel="next" href="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
@@ -33,12 +33,12 @@
                             "url": "https:\/\/danish-mehmood.github.io\/images\/posts\/TLS\/featuredimage.webp",
                             "width":  640 ,
                             "height":  320 
-                        }],"genre": "posts","keywords": "networking, security","wordcount":  1038 ,
+                        }],"genre": "posts","keywords": "networking, security","wordcount":  1063 ,
         "url": "https:\/\/danish-mehmood.github.io\/tls-deep-dive\/","datePublished": "2024-12-28T20:58:03+05:00","dateModified": "2024-12-28T20:58:03+05:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
-                "name": "Danish Mehmood"
+                "name": "danish mehmood"
             },"description": ""
     }
     </script></head>
@@ -106,8 +106,8 @@
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SSL/TLS Deep Dive</h1><h2 class="single-subtitle">everything there is to know about secure sockets layer / transport layer security</h2><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Danish Mehmood</a></span>&nbsp;<span class="post-category">included in <a href="/categories/networking/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>networking</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-12-28">2024-12-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1038 words&nbsp;
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/danish-mehmood" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>danish mehmood</a></span>&nbsp;<span class="post-category">included in <a href="/categories/networking/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>networking</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-12-28">2024-12-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1063 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
@@ -140,7 +140,17 @@
     <li><a href="#the-end">The End</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><blockquote>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Table Of Contents<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 1 - <strong>Introduction to TLS</strong> <i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>&nbsp;you are here <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 2 - <a href="https://danish-mehmood.github.io/tls-deep-dive-parttwo-cryptography-primitives" target="_blank" rel="noopener noreffer ">Crytography Primitives</a></p>
+</div>
+        </div>
+    </div>
+<blockquote>
 <p>Disclaimer: I will use the term TLS instead of SSL in this blog to get rid of me writing and you reading “SSL/TLS“ again and again, TLS and SSL are different versions of the same protocol and TLS is the one in use.</p>
 </blockquote>
 <h2 id="what-this-blog-post-is-about">What This Blog Post Is About</h2>
@@ -243,7 +253,8 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/microservices-architecture-deep-dive-part-six-distributed-transactions/" class="prev" rel="prev" title="Microservices Architecture Deep Dive Part Six: Distributed Transactions"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Microservices Architecture Deep Dive Part Six: Distributed Transactions</a></div>
+    <div class="post-nav"><a href="/microservices-architecture-deep-dive-part-six-distributed-transactions/" class="prev" rel="prev" title="Microservices Architecture Deep Dive Part Six: Distributed Transactions"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Microservices Architecture Deep Dive Part Six: Distributed Transactions</a>
+            <a href="/tls-deep-dive-parttwo--cryptography-primitives/" class="next" rel="next" title="SSL/TLS deep dive part 2: cryptography primitives">SSL/TLS deep dive part 2: cryptography primitives<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="giscus" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>SSL/TLS deep dive part 2: cryptography primitives - danish-mehmood</title><meta name="Description" content="Dive deep into tech"><meta property="og:title" content="SSL/TLS deep dive part 2: cryptography primitives" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/" /><meta property="og:image" content="https://danish-mehmood.github.io/images/posts/TLS/part2/featuredimage.webp" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-12-29T21:08:17+05:00" />
+<meta property="article:modified_time" content="2024-12-29T21:08:17+05:00" /><meta property="og:site_name" content="danish-mehmood.io" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://danish-mehmood.github.io/images/posts/TLS/part2/featuredimage.webp"/>
+
+<meta name="twitter:title" content="SSL/TLS deep dive part 2: cryptography primitives"/>
+<meta name="twitter:description" content=""/>
+<meta name="application-name" content="danish-mehmood.io">
+<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/" /><link rel="prev" href="https://danish-mehmood.github.io/tls-deep-dive/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "SSL/TLS deep dive part 2: cryptography primitives",
+        "inLanguage": "en-us",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/danish-mehmood.github.io\/tls-deep-dive-parttwo--cryptography-primitives\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "https:\/\/danish-mehmood.github.io\/images\/posts\/TLS\/part2\/featuredimage.webp",
+                            "width":  720 ,
+                            "height":  393 
+                        }],"genre": "posts","keywords": "networking, security","wordcount":  1978 ,
+        "url": "https:\/\/danish-mehmood.github.io\/tls-deep-dive-parttwo--cryptography-primitives\/","datePublished": "2024-12-29T21:08:17+05:00","dateModified": "2024-12-29T21:08:17+05:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "danish mehmood"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="search the blog" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="search the blog" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SSL/TLS deep dive part 2: cryptography primitives</h1><h2 class="single-subtitle">This blog post is second in series of blog posts on TLS , in this blog post i will lay down the cryptographic foundations you need to know to make sense of TLS.</h2><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/danish-mehmood" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>danish mehmood</a></span>&nbsp;<span class="post-category">included in <a href="/categories/networking/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>networking</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-12-29">2024-12-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1978 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;10 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/part2/featuredimage.webp"
+        data-srcset="/images/posts/TLS/part2/featuredimage.webp, /images/posts/TLS/part2/featuredimage.webp 1.5x, /images/posts/TLS/part2/featuredimage.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/part2/featuredimage.webp"
+        title="/images/posts/TLS/part2/featuredimage.webp" width="720" height="393" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#hashing-algorithms-">Hashing Algorithms 🧮</a></li>
+    <li><a href="#hands-on">Hands-On</a></li>
+    <li><a href="#collisions--">Collisions 💥 🏎</a></li>
+    <li><a href="#integrity-authentication-and-hmac">Integrity, Authentication And HMAC:</a></li>
+    <li><a href="#hmac-and-authentication">HMAC And Authentication</a></li>
+    <li><a href="#encryption-">Encryption 🔢:</a></li>
+    <li><a href="#asymmetric-cryptography">Asymmetric cryptography:</a></li>
+    <li><a href="#symmetric-cryptography">Symmetric cryptography:</a>
+      <ul>
+        <li><a href="#confidentiality">Confidentiality:</a></li>
+        <li><a href="#authentication-digital-signatures-and-integrity-">Authentication (digital signatures) and Integrity 🖊:</a></li>
+        <li><a href="#hybrid-encryption">Hybrid Encryption:</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Table Of Contents<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 1 - <a href="https://danish-mehmood.github.io/tls-deep-dive/" target="_blank" rel="noopener noreffer ">Introduction to TLS</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 2 - <strong>Crytography Primitives</strong> <i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>&nbsp;you are here <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i></p>
+</div>
+        </div>
+    </div>
+<p>In my last blog post, I tried to put TLS in a context in which it is easier to see why TLS is needed in the first place, what problems it solves, and what services it provides to make our communication over a public network secure.</p>
+<p>In this blog I want to tell you about some cryptography principles behind TLS, it is a prerequisite to grok TLS, in this blog post I will write about hashing algorithms,**<em>HMAC, Encryption, public-private</em>**keys, etc.</p>
+<h2 id="hashing-algorithms-">Hashing Algorithms 🧮</h2>
+<p>Hashing algorithms are a category of algorithms that take input of arbitrary length and output a string of fixed length.</p>
+<p>Hashing is ubiquitous in computer science, it has so many applications and is a useful category of algorithms.</p>
+<p>let me describe a very basic hashing algorithm, suppose I have a hashing algorithm that takes in a string “hello” and outputs the sum of the numbers at which every letter of the string occurs in the alphabetical order.</p>
+<p>so if the input is “hello” the output would be 8 + 5 + 12 + 12 + 15 = 52.</p>
+<p>likewise, you can see the output for any given input, it’s a very simple implementation.</p>
+<p>although this example algorithm is good for example purposes but is a horrible hashing algorithm, you would be thinking how could someone categorize hash functions as good or bad,</p>
+<p>the answer is good hashing algorithms should follow the following 4 rules</p>
+<ol>
+<li>
+<p>Infeasible to produce a given digest.</p>
+</li>
+<li>
+<p>Impossible to extract the original message.</p>
+</li>
+<li>
+<p>Slight changes produce a big difference in the output.</p>
+</li>
+<li>
+<p>The size of the output should be fixed.</p>
+</li>
+</ol>
+<p>if you try to filter the hashing algorithm we discussed through these 4 rules, it won’t check a single rule, which is why it is a terrible hashing algorithm.</p>
+<h2 id="hands-on">Hands-On</h2>
+<p>Next, I would demonstrate a good hashing algorithm called sha-256.</p>
+<p>If you want to follow along and have Linux then open up the terminal and follow along otherwise you can use an online sha-256 generator.
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/part2/handson1.webp"
+        data-srcset="/images/posts/TLS/part2/handson1.webp, /images/posts/TLS/part2/handson1.webp 1.5x, /images/posts/TLS/part2/handson1.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/part2/handson1.webp"
+        title="practical" width="871" height="55" /></p>
+<p>as you can see when I gave “hello“ as an input to the sha256sum Linux utility it outputs a random string. if you give the same input you will get a similar output as me.</p>
+<p>as sha-256 is a good hashing algorithm and is being used in the real world, it follows all 4 rules I stated.</p>
+<p>it is close to impossible to generate all the inputs given the output or the other way around, telling the input which generated the specific output,</p>
+<p>it also satisfies the rule of output being of specific size, sha-256 given input of any size would always output a string of size 256 bits.</p>
+<p>it also satisfies the rule which states that a small change in input should result in a big change of output, see the following example.
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/part2/handson2.webp"
+        data-srcset="/images/posts/TLS/part2/handson2.webp, /images/posts/TLS/part2/handson2.webp 1.5x, /images/posts/TLS/part2/handson2.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/part2/handson2.webp"
+        title="practical" width="936" height="43" /></p>
+<p>Only introducing a period at the end of the last input has changed the output drastically (this is called an avalanche effect) from,</p>
+<p><strong>5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03</strong></p>
+<p>to</p>
+<p><strong>5d382abfb5da6294d05e4afade40adcdfc85ac56a6a2e6d94b9734c41c6ddbf3</strong></p>
+<h2 id="collisions--">Collisions 💥 🏎</h2>
+<p>collision occurs when two <strong>different</strong> inputs map to the <strong>same</strong> output,</p>
+<p>to understand collisions consider the following example, suppose we have a hash function that takes arbitrary input and outputs fixed size three bit string.</p>
+<p>the total unique strings that our function would be able to output would be <strong><em>23= 2 × 2 × 2 = 8</em></strong>.</p>
+<p>which is very small if we give our function 9 <strong>different</strong> inputs the two inputs are bound to map to the same output string.</p>
+<p>this is called collision, and it is inevitable when you have output of a fixed size but in the case of good hashing algorithms like sha-256 which has 256-bit size output, it is very unlikely to happen because 2^256 is a humongous number.</p>
+<h2 id="integrity-authentication-and-hmac">Integrity, Authentication And HMAC:</h2>
+<p>Integrity as I explained in the last post is a property of data reaching the recipient as it leaves the sender, unchanged.</p>
+<p>TLS uses hashing to achieve integrity.
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/part2/hmac.webp"
+        data-srcset="/images/posts/TLS/part2/hmac.webp, /images/posts/TLS/part2/hmac.webp 1.5x, /images/posts/TLS/part2/hmac.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/part2/hmac.webp"
+        title="hmac" width="659" height="167" />
+consider the following scenario. blue user wants to send a message to the green user over the internet and also wants to ensure the integrity of the message. for that blue user does not only send the message but also the hash of the message to the green user, the green user gets the message and hash, hashes the message, and compares the produced hash with the hash sent with the message by the blue user and if the hashes match the green user would know that the message hasn’t been changed.</p>
+<p><strong><em>Do you notice any problem in this flow? It&rsquo;s quite easy to spot.</em></strong></p>
+<p>the man in the middle could easily get the message as well as the hash, change the message append the hash of a modified message, and send it to the green user and the green user would never know that the message was changed in transition because the message and the hash would match at his end.</p>
+<h2 id="hmac-and-authentication">HMAC And Authentication</h2>
+<p>To overcome this problem, before sending any message green and blue user agree on a key (we will go deep into this, how this is done for now just know that they exchange a key), then when they are sending a message they don’t only hash the message they want to send, instead they hash both message and the key together and then send the message towards the other side, the remaining flow remains the same.</p>
+<p>the result of hashing the message and the key is called message authentication code,</p>
+<p>notice that the parties don’t only need to agree on the key but also how they are going to hash the key with the message because remember, appending the key to the message then hashing and putting the key before the message then hashing would result in different hashes.</p>
+<p>to make sure these things don’t become a reason for conflict there is a whole RFC standard that guides and standardizes the process called HMAC.</p>
+<p>there is one more thing you need to notice, HMAC does not only provide integrity it also provides authentication because when you are putting the key with the message and then hashing, the recipient wouldn’t only be sure of the integrity of the message but also they would know that this message could only be sent by the person who has the key (which was exchanged in the beginning of the process).</p>
+<blockquote>
+<p>So HMAC is how TLS achieves integrity and authentication.</p>
+</blockquote>
+<h2 id="encryption-">Encryption 🔢:</h2>
+<p>As we discussed in the last post TLS also provides confidentiality, it uses encryption to achieve the goal of confidentiality.</p>
+<p>Encryption is a very simple affair, you take an input, feed it to some encryption algorithm, and get the output, in the case of encryption the input is called plain text and the output is called cipher text.</p>
+<p>the simple encryption in which you don’t use any key and just shuffle the plain text to get the cipher text is not scalable, because to send the message to every different person you would need to come up with a new algorithm to encrypt.</p>
+<p>this is the reason we use key-based encryption in which the algorithms are known to everyone but the keys used are private. using this approach we can use different keys with the same algorithm and the cipher text will not break.</p>
+<p>there are two ways to do the key-based encryption, one is asymmetric cryptography and the other is symmetric cryptography.</p>
+<h2 id="asymmetric-cryptography">Asymmetric cryptography:</h2>
+<p>in this type of cryptography, you have two pieces of keys one is public and the other is private, one you could use for encryption and the other for decryption. these two keys are mathematically related, if you encrypt with one key only the other key in the pair could decrypt it.</p>
+<p>asymmetric cryptography has some weaknesses, it is compute intensive it takes a lot of compute power to encrypt and decrypt, and secondly the cipher text is large compared to plain text.</p>
+<p>it also has a very useful pro, which is the private key is never shared with anyone, it always remains with the user and public key could be known by anyone, it does not matter.</p>
+<h2 id="symmetric-cryptography">Symmetric cryptography:</h2>
+<p>in a symmetric crypto setup we only have one key which is used for both encryption and decryption, and this has an inherent weakness as we would need to share the key and anyone can capture it in transit,</p>
+<p>symmetric cryptography is very fast at working on large amounts of data and the cipher text it produces is equal in size to the plain text.</p>
+<blockquote>
+<p>For bulk data, symmetric crypto is used and for small amounts of data asymmetric crypto is used</p>
+</blockquote>
+<p>Public-Private Key Encryption 🔑:
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/part2/pubprivkey.webp"
+        data-srcset="/images/posts/TLS/part2/pubprivkey.webp, /images/posts/TLS/part2/pubprivkey.webp 1.5x, /images/posts/TLS/part2/pubprivkey.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/part2/pubprivkey.webp"
+        title="practical" width="695" height="167" />
+let’s try to understand the use of private and public keys in TLS in a more coherent way.</p>
+<h3 id="confidentiality">Confidentiality:</h3>
+<p>suppose Jim wants to send Pam a message and wants confidentiality, what he would do is encrypt the message using “Pam’s public key” and send the message over the wire, as the message was encrypted using Pam’s public key, only Pam’s private key could decrypt and only pam can read it hence confidentiality is achieved.</p>
+<h3 id="authentication-digital-signatures-and-integrity-">Authentication (digital signatures) and Integrity 🖊:</h3>
+<p>now consider another scenario where Jim wants to send Pam a message and does not care about confidentiality but wants Pam to know that the message was indeed sent by him, to achieve this he would now use his private key to encrypt the message and when the message would reach pam she could only decrypt using Jim’s public key that she has and now she would know that the message is from him.</p>
+<p>this technique is called digital signatures. because the user is using encryption to prove his or her identity.</p>
+<p>but notice that digital signatures also have a side effect which is “integrity”. because when Pam was able to decrypt the message successfully she also got the confirmation the message was not modified in transition because if it was changed then she won’t be able to decrypt it.</p>
+<h3 id="hybrid-encryption">Hybrid Encryption:</h3>
+<p>In the real world, the two kinds of encryption are not used in isolation, but they are used together because they complement each other so well and cancel each others weakness’s</p>
+<p>remember that asymmetric cryptography is not feasible for bulk data and symmetric crypto is.</p>
+<p>and that asymmetric crypto is safe in a way that private keys are never shared and symmetric cryptography has a drawback that we need to share the same key among users and there is a danger of a secret key being captured in transit.</p>
+<blockquote>
+<p>well in the real world, a hybrid model is used in which asymmetric cryptography is used to exchange the keys and then further communication among the involved parties is encrypted and decrypted using symmetric keys. This way we get best of both worlds.</p>
+</blockquote>
+<p><strong>What about the signatures then?</strong>
+as we have discussed before asymmetric encryption is used to digitally sign messages but with a single key in the symmetric crypto signatures are not possible. and asymmetric crypto is not good for large amounts of data so how do we sign data to prove the identity?</p>
+<p>we can use the smaller version of the message for signature purposes, this is where hashing comes in, we can hash the message first and then sign it using a private key, and add it to the message, then the recipient can decrypt using public key getting the hash, then hashing the original message and comparing the two hashes would know the sender is the expected one.</p>
+<blockquote>
+<p>this achieves once again authentication and integrity.</p>
+</blockquote>
+<p>This is it for this blog entry in future posts I will go deeper into the implementation and consequences of TLS.</p>
+<p>I hope now you have understood what role encryption and hashing plays in TLS and how everything fits together.</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2024-12-29</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/tls-deep-dive-parttwo--cryptography-primitives/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/" data-title="SSL/TLS deep dive part 2: cryptography primitives" data-hashtags="networking,security"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/" data-hashtag="networking"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/" data-title="SSL/TLS deep dive part 2: cryptography primitives"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/networking/">networking</a>,&nbsp;<a href="/tags/security/">security</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/tls-deep-dive/" class="prev" rel="prev" title="SSL/TLS Deep Dive"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>SSL/TLS Deep Dive</a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Danish Mehmood</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOMZSvQM4ChDiJ","darkTheme":"dark","emitMetadata":"1","inputPosition":"bottom","lang":"en","lazyLoading":true,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"danish-mehmood/Giscus","repoId":"R_kgDOMZSvQA"}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-1H67WDJ7JS');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-1H67WDJ7JS" async></script></body>
+</html>
