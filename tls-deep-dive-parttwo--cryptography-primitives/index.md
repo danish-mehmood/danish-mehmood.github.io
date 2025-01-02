@@ -9,6 +9,7 @@
 
 :(fa-solid fa-arrow-right-long): Part 2 - **Crytography Primitives** :(fa-solid fa-arrow-left-long): you are here :(fa-solid fa-location-crosshairs):
 
+:(fa-solid fa-arrow-right-long): Part 1 - [Public Key Infrastructure](https://danish-mehmood.github.io/tls-deep-dive-part-three/)
 {{< /admonition >}}
 
 In my last blog post, I tried to put TLS in a context in which it is easier to see why TLS is needed in the first place, what problems it solves, and what services it provides to make our communication over a public network secure.

@@ -9,6 +9,8 @@
 
 :(fa-solid fa-arrow-right-long): Part 2 - [Crytography Primitives](https://danish-mehmood.github.io/tls-deep-dive-parttwo-cryptography-primitives)
 
+:(fa-solid fa-arrow-right-long): Part 1 - [Public Key Infrastructure](https://danish-mehmood.github.io/tls-deep-dive/)
+
 {{< /admonition >}}
 
 > Disclaimer: I will use the term TLS instead of SSL in this blog to get rid of me writing and you reading “SSL/TLS“ again and again, TLS and SSL are different versions of the same protocol and TLS is the one in use.

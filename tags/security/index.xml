@@ -4,7 +4,17 @@
         <link>https://danish-mehmood.github.io/tags/security/</link>
         <description>security - Tag - danish-mehmood</description>
         <generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>rdm355190@gmail.com (Danish Mehmood)</managingEditor>
-            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Sun, 29 Dec 2024 21:08:17 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/tags/security/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>rdm355190@gmail.com (Danish Mehmood)</webMaster><lastBuildDate>Thu, 02 Jan 2025 23:19:12 &#43;0500</lastBuildDate><atom:link href="https://danish-mehmood.github.io/tags/security/" rel="self" type="application/rss+xml" /><item>
+    <title>Tls Deep Dive Part Three</title>
+    <link>https://danish-mehmood.github.io/tls-deep-dive-part-three/</link>
+    <pubDate>Thu, 02 Jan 2025 23:19:12 &#43;0500</pubDate>
+    <author>Author</author>
+    <guid>https://danish-mehmood.github.io/tls-deep-dive-part-three/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/posts/TLS/part3/featuredimage.webp" referrerpolicy="no-referrer">
+            </div>]]></description>
+</item>
+<item>
     <title>SSL/TLS deep dive part 2: cryptography primitives</title>
     <link>https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/</link>
     <pubDate>Sun, 29 Dec 2024 21:08:17 &#43;0500</pubDate>

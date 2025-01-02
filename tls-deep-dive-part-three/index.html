@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Tls Deep Dive Part Three - danish-mehmood</title><meta name="Description" content="Dive deep into tech"><meta property="og:title" content="Tls Deep Dive Part Three" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://danish-mehmood.github.io/tls-deep-dive-part-three/" /><meta property="og:image" content="https://danish-mehmood.github.io/images/posts/TLS/part3/featuredimage.webp" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2025-01-02T23:19:12+05:00" />
+<meta property="article:modified_time" content="2025-01-02T23:19:12+05:00" /><meta property="og:site_name" content="danish-mehmood.io" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://danish-mehmood.github.io/images/posts/TLS/part3/featuredimage.webp"/>
+
+<meta name="twitter:title" content="Tls Deep Dive Part Three"/>
+<meta name="twitter:description" content=""/>
+<meta name="application-name" content="danish-mehmood.io">
+<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/tls-deep-dive-part-three/" /><link rel="prev" href="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Tls Deep Dive Part Three",
+        "inLanguage": "en-us",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/danish-mehmood.github.io\/tls-deep-dive-part-three\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "https:\/\/danish-mehmood.github.io\/images\/posts\/TLS\/part3\/featuredimage.webp",
+                            "width":  720 ,
+                            "height":  479 
+                        }],"genre": "posts","keywords": "networking, security","wordcount":  462 ,
+        "url": "https:\/\/danish-mehmood.github.io\/tls-deep-dive-part-three\/","datePublished": "2025-01-02T23:19:12+05:00","dateModified": "2025-01-02T23:19:12+05:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Danish Mehmood"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="search the blog" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="danish-mehmood"><span class="header-title-pre">$:~/</span>Danish-Mehmood.io<span class="header-title-post">/</span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="search the blog" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Tls Deep Dive Part Three</h1><h2 class="single-subtitle">I am sure the last blog post has left you little confused, well don&#39;t fret. In this post i will make clear how TLS uses all the cryptographic tools which we have discussed so far.</h2><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Danish Mehmood</a></span>&nbsp;<span class="post-category">included in <a href="/categories/networking/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>networking</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-01-02">2025-01-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;462 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/part3/featuredimage.webp"
+        data-srcset="/images/posts/TLS/part3/featuredimage.webp, /images/posts/TLS/part3/featuredimage.webp 1.5x, /images/posts/TLS/part3/featuredimage.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/part3/featuredimage.webp"
+        title="/images/posts/TLS/part3/featuredimage.webp" width="720" height="479" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#lets-deep-dive">Let&rsquo;s Deep Dive</a></li>
+    <li><a href="#public-key-infrastructure">Public Key Infrastructure</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw" aria-hidden="true"></i>Table Of Contents<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 1 - <a href="https://danish-mehmood.github.io/tls-deep-dive/" target="_blank" rel="noopener noreffer ">Introduction to TLS</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 2 - <a href="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/" target="_blank" rel="noopener noreffer ">Crytography Primitives</a></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 3 - <strong>Public Key Infrastructure</strong> <i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>&nbsp;you are here <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i></p>
+</div>
+        </div>
+    </div>
+<blockquote>
+<p>A lot of we have discussed so far seems to overlap, the purpose of this post is to delineate what we have learned so far so that you understand how all the parts fit together in TLS. consider this a mini-review.</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/part3/image1.webp"
+        data-srcset="/images/posts/TLS/part3/image1.webp, /images/posts/TLS/part3/image1.webp 1.5x, /images/posts/TLS/part3/image1.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/part3/image1.webp"
+        title="hashing" width="865" height="356" />
+The above diagram is very helpful in clearing the confusion, as you can see hashing provides integrity and authentication, symmetric encryption provides confidentiality, and asymmetric Encryption provides all three, namely integrity, authentication, and confidentiality (if you are not sure how? go read the last post in the series).</p>
+<p><strong><em>But the question is which one to use?</em></strong></p>
+<p><strong><em>The better question is when to use which one?</em></strong>
+as I wrote in the <a href="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/" target="_blank" rel="noopener noreffer ">last post</a> hashing and symmetric encryption are better for <strong><em>bulk data</em></strong> to provide integrity, confidentiality, and authentication, whereas asymmetric encryption is suitable for **_limited data _**to provide all three services.</p>
+<h2 id="lets-deep-dive">Let&rsquo;s Deep Dive</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/part3/image2.webp"
+        data-srcset="/images/posts/TLS/part3/image2.webp, /images/posts/TLS/part3/image2.webp 1.5x, /images/posts/TLS/part3/image2.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/part3/image2.webp"
+        title="bulk data" width="796" height="300" /></p>
+<p>suppose the client and the server want to exchange bulk data and to make sure the confidentiality and integrity of that data they need to establish a mutual secret key.</p>
+<p>Well secret key is a small amount of data, the prudent thing to do here would be to use asymmetric keys to exchange this secret key between the client and the server. and after the key exchange, the client and the server start to exchange data.
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/part3/image3.webp"
+        data-srcset="/images/posts/TLS/part3/image3.webp, /images/posts/TLS/part3/image3.webp 1.5x, /images/posts/TLS/part3/image3.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/part3/image3.webp"
+        title="bulk data" width="795" height="373" /></p>
+<blockquote>
+<p>There is a problem though, anyone on the internet can generate a pair of asymmetric keys, even you sitting on your computer can generate a pair using OpenSSL, it will hardly take 30 seconds, so how to make sure that the server you are talking to is blue.com or google.com and not someone else masquerading as them?</p>
+</blockquote>
+<h2 id="public-key-infrastructure">Public Key Infrastructure</h2>
+<p>This is the point where a certificate authority comes in, it’s an entity that the client and the server both trust.</p>
+<p>A certificate authority simply links asymmetric key pair to a specific identity, It provides a certificate that proclaims that the private key associated with the public key in this certificate is blue.com or google.com.</p>
+<p>But how do we know that the certificate is legit? and that it is generated by the authority we trust.</p>
+<p>well, that’s easy, the CA will digitally sign the certificate and if the client would be able to decrypt the certificate with the public key that it trusts, it would know that the certificate is legit.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/TLS/part3/image4.webp"
+        data-srcset="/images/posts/TLS/part3/image4.webp, /images/posts/TLS/part3/image4.webp 1.5x, /images/posts/TLS/part3/image4.webp 2x"
+        data-sizes="auto"
+        alt="/images/posts/TLS/part3/image4.webp"
+        title="PKI" width="795" height="373" /></p>
+<p>as you can see in the diagram above, this communication scenario creates a triangle, with the client, the server, and the CA on the vertices, this triangle of trust is known by a fancy name Public Key Infrastructure.</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-01-02</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/tls-deep-dive-part-three/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://danish-mehmood.github.io/tls-deep-dive-part-three/" data-title="Tls Deep Dive Part Three" data-hashtags="networking,security"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://danish-mehmood.github.io/tls-deep-dive-part-three/" data-hashtag="networking"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://danish-mehmood.github.io/tls-deep-dive-part-three/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://danish-mehmood.github.io/tls-deep-dive-part-three/" data-title="Tls Deep Dive Part Three"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/networking/">networking</a>,&nbsp;<a href="/tags/security/">security</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/tls-deep-dive-parttwo--cryptography-primitives/" class="prev" rel="prev" title="SSL/TLS deep dive part 2: cryptography primitives"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>SSL/TLS deep dive part 2: cryptography primitives</a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Danish Mehmood</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOMZSvQM4ChDiJ","darkTheme":"dark","emitMetadata":"1","inputPosition":"bottom","lang":"en","lazyLoading":true,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"danish-mehmood/Giscus","repoId":"R_kgDOMZSvQA"}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-1H67WDJ7JS');
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-1H67WDJ7JS" async></script></body>
+</html>

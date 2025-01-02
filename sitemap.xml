@@ -2,14 +2,15 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://danish-mehmood.github.io/categories/</loc><lastmod>2024-12-29T21:08:17&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://danish-mehmood.github.io/</loc><lastmod>2024-12-29T21:08:17&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://danish-mehmood.github.io/tags/networking/</loc><lastmod>2024-12-29T21:08:17&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://danish-mehmood.github.io/categories/networking/</loc><lastmod>2024-12-29T21:08:17&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://danish-mehmood.github.io/posts/</loc><lastmod>2024-12-29T21:08:17&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://danish-mehmood.github.io/tags/security/</loc><lastmod>2024-12-29T21:08:17&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://danish-mehmood.github.io/categories/</loc><lastmod>2025-01-02T23:19:12&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://danish-mehmood.github.io/</loc><lastmod>2025-01-02T23:19:12&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://danish-mehmood.github.io/tags/networking/</loc><lastmod>2025-01-02T23:19:12&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://danish-mehmood.github.io/categories/networking/</loc><lastmod>2025-01-02T23:19:12&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://danish-mehmood.github.io/posts/</loc><lastmod>2025-01-02T23:19:12&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://danish-mehmood.github.io/tags/security/</loc><lastmod>2025-01-02T23:19:12&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://danish-mehmood.github.io/tags/</loc><lastmod>2025-01-02T23:19:12&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://danish-mehmood.github.io/tls-deep-dive-part-three/</loc><lastmod>2025-01-02T23:19:12&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/</loc><lastmod>2024-12-29T21:08:17&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://danish-mehmood.github.io/tags/</loc><lastmod>2024-12-29T21:08:17&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://danish-mehmood.github.io/tls-deep-dive/</loc><lastmod>2024-12-28T20:58:03&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://danish-mehmood.github.io/tags/distributed-systems/</loc><lastmod>2024-12-26T01:46:08&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
             <loc>https://danish-mehmood.github.io/tags/microservices/</loc><lastmod>2024-12-26T01:46:08&#43;05:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>

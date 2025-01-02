@@ -17,7 +17,7 @@
 <meta name="twitter:title" content="SSL/TLS deep dive part 2: cryptography primitives"/>
 <meta name="twitter:description" content=""/>
 <meta name="application-name" content="danish-mehmood.io">
-<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/" /><link rel="prev" href="https://danish-mehmood.github.io/tls-deep-dive/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<meta name="apple-mobile-web-app-title" content="danish-mehmood.io"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="images/avatar.jpg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://danish-mehmood.github.io/tls-deep-dive-parttwo--cryptography-primitives/" /><link rel="prev" href="https://danish-mehmood.github.io/tls-deep-dive/" /><link rel="next" href="https://danish-mehmood.github.io/tls-deep-dive-part-three/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
@@ -33,7 +33,7 @@
                             "url": "https:\/\/danish-mehmood.github.io\/images\/posts\/TLS\/part2\/featuredimage.webp",
                             "width":  720 ,
                             "height":  393 
-                        }],"genre": "posts","keywords": "networking, security","wordcount":  1978 ,
+                        }],"genre": "posts","keywords": "networking, security","wordcount":  1986 ,
         "url": "https:\/\/danish-mehmood.github.io\/tls-deep-dive-parttwo--cryptography-primitives\/","datePublished": "2024-12-29T21:08:17+05:00","dateModified": "2024-12-29T21:08:17+05:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -107,7 +107,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SSL/TLS deep dive part 2: cryptography primitives</h1><h2 class="single-subtitle">This blog post is second in series of blog posts on TLS , in this blog post i will lay down the cryptographic foundations you need to know to make sense of TLS.</h2><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="https://github.com/danish-mehmood" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>danish mehmood</a></span>&nbsp;<span class="post-category">included in <a href="/categories/networking/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>networking</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-12-29">2024-12-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1978 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2024-12-29">2024-12-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1986 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;10 minutes&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
@@ -146,6 +146,7 @@
         <div class="details-content">
             <div class="admonition-content"><p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 1 - <a href="https://danish-mehmood.github.io/tls-deep-dive/" target="_blank" rel="noopener noreffer ">Introduction to TLS</a></p>
 <p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 2 - <strong>Crytography Primitives</strong> <i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>&nbsp;you are here <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i></p>
+<p><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>&nbsp;Part 1 - <a href="https://danish-mehmood.github.io/tls-deep-dive-part-three/" target="_blank" rel="noopener noreffer ">Public Key Infrastructure</a></p>
 </div>
         </div>
     </div>
@@ -300,7 +301,8 @@ as we have discussed before asymmetric encryption is used to digitally sign mess
         </section>
     </div>
 
-    <div class="post-nav"><a href="/tls-deep-dive/" class="prev" rel="prev" title="SSL/TLS Deep Dive"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>SSL/TLS Deep Dive</a></div>
+    <div class="post-nav"><a href="/tls-deep-dive/" class="prev" rel="prev" title="SSL/TLS Deep Dive"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>SSL/TLS Deep Dive</a>
+            <a href="/tls-deep-dive-part-three/" class="next" rel="next" title="Tls Deep Dive Part Three">Tls Deep Dive Part Three<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="giscus" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
